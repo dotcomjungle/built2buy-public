@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Built2Buy Admin Redesign — Stakeholder Profiles, Handoffs &amp; Rollout (v2 Draft) | Wave 2</title>
+<meta name="description" content="Wave 2: deep-dive stakeholder profiles, inter-role handoffs, and phased rollout plan for the Built2Buy admin redesign.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cerulean: #0693e3;
+    --teal: #2DB68D;
+    --dark: #111111;
+    --soft: #8ed1fc;
+    --paper: #f7f9fb;
+    --border: #e3e8ee;
+    --muted: #6b7280;
+    --warning-bg: #fff7e6;
+    --warning-fg: #8a6d1d;
+    --success-bg: #d8f4ea;
+    --success-fg: #0d6d4f;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--dark); background: var(--paper); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 80px; }
+
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .breadcrumb a { color: var(--cerulean); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .brand-tag { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cerulean); }
+  h1 { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: clamp(32px, 4.5vw, 50px); letter-spacing: -0.02em; margin: 12px 0 12px; line-height: 1.1; color: var(--dark); }
+  .subtitle { color: var(--muted); font-size: 15px; }
+  .lede { font-size: 16px; color: #2a2f36; max-width: 800px; margin-top: 18px; }
+  .status-pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--warning-bg); color: var(--warning-fg); border-radius: 999px; margin-top: 14px; font-family: 'Urbanist', sans-serif; letter-spacing: 0.06em; }
+
+  .section-nav {
+    position: sticky; top: 0; background: var(--paper); border-bottom: 1px solid var(--border);
+    margin: 28px -28px 0; padding: 14px 28px; z-index: 10;
+    display: flex; flex-wrap: wrap; gap: 22px; font-size: 13px;
+  }
+  .section-nav a { color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .section-nav a:hover { color: var(--cerulean); }
+
+  .section { margin-top: 80px; scroll-margin-top: 70px; }
+  .section-header { display: flex; align-items: baseline; gap: 18px; padding-bottom: 14px; border-bottom: 2px solid var(--cerulean); margin-bottom: 28px; flex-wrap: wrap; }
+  .section-header .num { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 36px; color: var(--cerulean); line-height: 1; }
+  .section-header h2 { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; letter-spacing: -0.01em; }
+  .section-intro { font-size: 15px; color: #2a2f36; max-width: 820px; margin-bottom: 28px; }
+
+  /* Profile cards */
+  .profile {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px 24px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .profile::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--cerulean);
+    border-radius: 14px 0 0 14px;
+  }
+  .profile.platform-side::before { background: var(--soft); }
+  .profile-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .profile-head .role { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 22px; color: var(--dark); }
+  .profile-head .alias { font-size: 12px; color: var(--muted); font-style: italic; }
+  .profile .who { margin-top: 14px; font-size: 14px; color: #2a2f36; }
+  .profile .day { margin-top: 10px; font-size: 14px; color: #2a2f36; }
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+  }
+  @media (max-width: 720px) { .profile-grid { grid-template-columns: 1fr; } }
+  .profile-grid h4 {
+    font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .profile-grid ul { margin: 0; padding-left: 18px; font-size: 13px; color: #2a2f36; }
+  .profile-grid li { margin-bottom: 5px; }
+  .profile-grid p { margin: 0; font-size: 13px; color: #2a2f36; }
+  .jtbd-list li {
+    margin-bottom: 8px;
+    list-style: none;
+    padding: 8px 12px;
+    background: var(--paper);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-size: 13px;
+  }
+  .jtbd-list { padding-left: 0; }
+  .frustration {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #fff5f5;
+    border-left: 3px solid #d6534b;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: #5a2a26;
+    font-style: italic;
+  }
+  .stack-marker {
+    display: inline-block;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .stack-marker.platform { background: var(--soft); color: #074d6e; }
+  .stack-marker.customer { background: var(--success-bg); color: var(--success-fg); }
+
+  /* Handoff cards */
+  .handoffs { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 18px; }
+  .handoff {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    position: relative;
+  }
+  .handoff .num {
+    position: absolute; top: 18px; right: 22px;
+    font-family: 'Urbanist', sans-serif; font-weight: 800;
+    font-size: 28px; color: #f0f4f8; line-height: 1;
+  }
+  .handoff .trigger {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--cerulean);
+    padding-right: 36px;
+  }
+  .handoff .title { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 16px; margin-top: 8px; padding-right: 36px; }
+  .handoff .flow {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--paper);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .handoff .flow .arrow { color: var(--cerulean); font-weight: 700; }
+  .handoff .from-to { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .handoff .role-pill {
+    display: inline-block;
+    padding: 3px 9px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .handoff .exchange { margin-top: 12px; font-size: 13px; color: #2a2f36; }
+  .handoff .exchange strong { color: var(--dark); }
+  .handoff .compare { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--muted); }
+  .handoff .today { color: #5a2a26; }
+  .handoff .new { color: var(--success-fg); }
+
+  /* Rollout timeline */
+  .timeline { position: relative; padding-left: 30px; margin-top: 28px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 9px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(to bottom, var(--cerulean), var(--teal));
+  }
+  .phase {
+    position: relative;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    margin-left: 16px;
+  }
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: -36px; top: 26px;
+    width: 18px; height: 18px;
+    background: var(--cerulean);
+    border: 4px solid var(--paper);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--cerulean);
+  }
+  .phase .label {
+    font-family: 'Urbanist', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--cerulean);
+  }
+  .phase .name { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 18px; margin-top: 4px; }
+  .phase .duration { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .phase .body { font-size: 14px; color: #2a2f36; margin-top: 12px; }
+  .phase .who { margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .phase .who strong { color: var(--dark); }
+
+  /* Boxes */
+  .risks { background: #fff7e6; border: 1px solid #f0d9a8; border-radius: 12px; padding: 24px 28px; margin-top: 30px; }
+  .risks h3 { font-family: 'Urbanist', sans-serif; color: var(--warning-fg); font-size: 16px; font-weight: 700; margin: 0 0 14px; }
+  .risks ol { margin: 0; padding-left: 20px; font-size: 14px; color: #2a2f36; }
+  .risks li { margin-bottom: 10px; }
+  .risks li strong { color: var(--dark); }
+
+  .metrics-card {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px 26px; margin-top: 22px;
+  }
+  .metrics-card h3 { font-family: 'Urbanist', sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 12px; }
+  .metrics-card ul { margin: 0; padding-left: 20px; font-size: 14px; }
+  .metrics-card li { margin-bottom: 6px; }
+  .metrics-card li strong { color: var(--dark); }
+
+  .doc-footer { margin-top: 90px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="breadcrumb"><a href="/">← Built2Buy Public</a> &nbsp;/&nbsp; Wave 2</div>
+    <div class="brand-tag">Built2Buy · Admin Redesign · Wave 2</div>
+    <h1>Stakeholder Profiles, Handoffs &amp; Rollout</h1>
+    <div class="subtitle">v2 Draft · April 25, 2026 · Authored by Seven for Steve Rice</div>
+    <p class="lede">Wave 2 goes deeper than the wave 1 map. Here are full profiles for each of the eleven stakeholders (who they really are, not just job titles), the ten most important interfaces between them (where work hands off and where it conflicts today), and a phased rollout plan that minimizes the disruption a system-wide redesign creates.</p>
+    <span class="status-pill">v2 Draft · iterating · not yet a build-ready engineering brief</span>
+
+    <nav class="section-nav">
+      <a href="#profiles">Stakeholder Profiles</a>
+      <a href="#handoffs">Handoffs &amp; Interfaces</a>
+      <a href="#rollout">Rollout &amp; Change Plan</a>
+    </nav>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- SECTION 1 : STAKEHOLDER PROFILES               -->
+  <!-- ============================================== -->
+  <section id="profiles" class="section">
+    <div class="section-header">
+      <span class="num">01</span>
+      <h2>Stakeholder Profiles — Who They Really Are</h2>
+    </div>
+    <p class="section-intro">A stakeholder is a person, not an org-chart slot. These profiles describe each of the eleven roles as the actual humans who'll use the system: their context, their day, what they're trying to accomplish, what blocks them today. The new admin gets designed around these humans — not around the plugins they currently fight with.</p>
+
+    <article class="profile platform-side">
+      <div class="profile-head">
+        <span class="role">Platform Operator</span>
+        <span class="alias">Built2Buy super-admin</span>
+        <span class="stack-marker platform">Platform-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> A Built2Buy engineer or operations lead. Lives in browser tabs, terminal sessions, and monitoring dashboards. Bounces across 30+ tenant sites in a day. Identifies as someone who runs a multi-tenant platform, not as "an admin with more checkboxes."</p>
+      <p class="day"><strong>A typical day:</strong> Slack pings about a customer's site, dependency upgrades, multi-tenant deploys, customer support tickets, occasional bug reproduction. Shifts between proactive ops and reactive firefighting.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When a customer reports a bug, reproduce it without disrupting their site, so I can fix before they call back.</li>
+            <li>When I roll out a platform change, see which tenants are affected and in what state, so I don't break someone in production.</li>
+            <li>When a new customer onboards, provision their site in minutes not days, so my queue doesn't grow.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Everything in the Platform area. Multisite operations, dev tools, integrations, customer onboarding, fleet observability.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Customer business decisions — pricing, marketing, hiring. Built2Buy operates the platform; customers run their business.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Customer support response time under 4 hours; zero unannounced outages; multi-tenant deploys land cleanly across the fleet.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Has to sudo into a tenant's WP admin to debug something that should be observable from a control plane.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Owner</span>
+        <span class="alias">The customer's top admin</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> The customer's owner, often 50-65, came up through sales or operations rather than software. The buck-stops-here human. Final authority on margin, pricing policy, and role assignments.</p>
+      <p class="day"><strong>A typical day:</strong> Mostly NOT in the admin. Logs in maybe twice a month — to check a dashboard, approve something, or because someone called them yelling. Spends most of their time on the phone, in meetings, or with customers.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When I open the system Monday morning, see if the business is healthy in 30 seconds, so I can get on with my day.</li>
+            <li>When something is off (revenue dropped, AR is high, key customer went quiet), know who to ask, so I don't waste a meeting.</li>
+            <li>When asked to approve a price exception or discount, get context fast, so I'm not the bottleneck.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Everything in their company's stack. Final pricing authority. Role assignments. Site operations.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Built2Buy platform infrastructure. Daily order processing. Catalog data entry.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Owner-facing dashboards drive 80%+ of their interaction; approval queues clear in &lt;24 hours; no surprise expenses on the monthly close.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> "I don't know what's going on in my own business without asking three people."</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Sales Director</span>
+        <span class="alias">Top of the customer's sales hierarchy</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> At a $15M+ distributor, this is a real role. Works the phone with the team and the road with key accounts. Often a former top rep promoted up. Lives in dashboards and rep one-on-ones.</p>
+      <p class="day"><strong>A typical day:</strong> Sales reports in the morning, rep coaching mid-day, customer escalations as they come, pipeline reviews in the afternoon. In meetings half the time.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>Know how the sales team is performing this week, by region and by rep, so I can coach early.</li>
+            <li>When a key account has a problem, get involved before it escalates to the Owner.</li>
+            <li>Approve customer-specific contract pricing without rubber-stamping.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>All sales activity — orders, accounts, contract pricing, customer-service tickets. Read-only on catalog and marketing.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Catalog data entry. Marketing content. Site operations. Bookkeeping.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Hits revenue targets quarter over quarter; rep retention &gt;85%; pricing exceptions clear in &lt;48 hours.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> "I have to call my reps to find out what's happening with their accounts."</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Regional Sales Manager</span>
+        <span class="alias">also: Internal Sales Rep</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Manages a region's reps. Geographically scoped — sees only their region's accounts. Often was a top rep promoted up, still carries some key accounts themselves. Half-seller, half-coach.</p>
+      <p class="day"><strong>A typical day:</strong> Splits time between selling (their key regional accounts) and managing (the reps in their region). Phone calls, ride-alongs, account reviews.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When a rep in my region underperforms, see what's happening with their accounts, so I can coach or reassign.</li>
+            <li>Place an order for a regional key account I'm closing on the phone, fast.</li>
+            <li>Approve a quote/contract that's within my region's authority.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Everything in their region. Cannot see other regions' accounts, orders, or pricing.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>National strategy (Sales Director's). Catalog/marketing/site ops.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Region hits its targets; new reps ramp in &lt;90 days; their region produces no escalations to Sales Director.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Spreadsheets and email threads instead of one source of truth for their region.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Phone Team</span>
+        <span class="alias">Desk module · sees ALL accounts</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Inside, desk-based. Headset on, two monitors. Order entry and customer support combined into one role. Often the first human voice a buyer hears when they call in.</p>
+      <p class="day"><strong>A typical day:</strong> Phone rings. A buyer wants an order, an answer, a quote, or a return. Process. Phone rings again. Steady volume.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>Place a buyer's order in under two minutes while they're on the phone.</li>
+            <li>When a buyer asks "where's my order," give a one-click answer.</li>
+            <li>Process a return without leaving the buyer on hold.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Full order entry across ALL accounts. Customer service tickets. Read on accounts, catalog, pricing.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Setting prices. Configuring shipping. Anything in marketing/catalog/site ops.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Average call &lt;5 minutes; first-call resolution &gt;70%; no re-keying of customer or order data.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> "I have to bounce between five plugins to do one order."</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Field Sales Rep</span>
+        <span class="alias">also: Outside Sales Rep · field module · assigned accounts only</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Outside, mobile. Truck cab, hotel lobby, customer's back office. Phone in one hand, laptop in the other (or just phone). Identifies as a salesperson who uses a tool, not as an administrator of a website.</p>
+      <p class="day"><strong>A typical day:</strong> Drive, visit, sell, drive, visit, sell. Often at a customer site for 30 minutes, then on the move. Order entry happens at night from a hotel, or on the spot when the buyer is ready.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When in front of a buyer, place their order on the spot without looking like an IT person.</li>
+            <li>Look up the buyer's last 10 orders before walking in, so I can re-up them.</li>
+            <li>See inventory on hand before promising a delivery date.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Their assigned accounts only — orders, account history, contract pricing, customer-service tickets for those accounts.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Other reps' accounts. Anything in catalog/marketing/site ops/shipping config.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Order capture in &lt;2 minutes on mobile; re-orders &gt;50% of their volume; mobile becomes their primary tool.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> WP admin doesn't work on a phone. Reps write orders down and enter them at night, costing accuracy and speed.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Marketing Coordinator</span>
+        <span class="alias">v1 name: Marketing Manager</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> At small-to-mid distributors, often part-time, outsourced, or the Owner's spouse working with a Fiverr graphic designer. At $15M+ might be a real full-time role with a coordinator title.</p>
+      <p class="day"><strong>A typical day:</strong> Email blasts, banner refreshes, promo coordination, catalog photography, sometimes copy-writing. Often coordinating with a contractor or vendor on creative work.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When a promotion runs, get it onto the site and to buyers in one motion.</li>
+            <li>When traffic spikes, see what's working so I can do more of it.</li>
+            <li>Manage MAP/IMAP policy without breaking anything.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>The Website. Marketing &amp; Analytics. Promotions and coupons. Read on accounts and catalog.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Setting list prices (Owner / Sales Director). Placing orders. Configuring shipping. Site infrastructure.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Email send-to-conversion &gt;2%; site traffic month-over-month growth; promo launches happen in &lt;1 day from concept to live.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Marketing scattered across plugins; no single view of "is marketing working."</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Catalog Manager</span>
+        <span class="alias">also: Buyer / Category Manager</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Often the most spreadsheet-fluent person in the building. Sometimes the buyer/purchasing person who also negotiates with vendors. Heavy data work, eye for detail.</p>
+      <p class="day"><strong>A typical day:</strong> Loading new products, fixing attribute errors, updating cost sheets, coordinating with vendors on availability. Bulk operations dominate.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>When new products arrive, add them in bulk without typing every field.</li>
+            <li>When a product changes (cost, image, availability), update one place and have it reflected everywhere.</li>
+            <li>When a buyer or rep complains a product page is wrong, find and fix it fast.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>The Catalog. Cost loading on products. Read on Website, Marketing, Returns.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Setting sell prices (Owner/Sales Director). Marketing campaigns. Order processing. Anything customer-facing.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Product entry time per SKU &lt;2 min; zero stale data complaints; cost margins always traceable.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Cost loaded in one place, sell price in another, with no consistency or single view.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Order Processor</span>
+        <span class="alias">Office side</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Office-based, eyes on screen, processing orders, generating invoices, handling order edits. Often phones with customers about ETAs.</p>
+      <p class="day"><strong>A typical day:</strong> Inbox of orders to process — some from the Phone Team, some from the website, some from outside reps. Edge cases (back-orders, partial shipments, payment issues) take up half the time.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>Process orders to shipped without re-keying anything.</li>
+            <li>When an order has a problem (back-order, payment, address), flag it to the Sales Rep and to the buyer.</li>
+            <li>Generate invoices and packing slips with one click.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Full on Orders &amp; Returns. Read on accounts, catalog, pricing, shipping.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Configuring shipping rules. Setting prices. Catalog. Marketing.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Avg order processing time &lt;5 min; invoice generation 100% automated; &lt;1% of orders need re-work.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Re-keys data between WC, the shipping plugin, and Webgility. Same data, three places.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Shipping &amp; Warehouse Lead</span>
+        <span class="alias">Floor side · includes warehouse picking</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Floor-based, on the move. Often has a tablet or scanner gun. Manages pickers (where they exist) and the carrier handoff.</p>
+      <p class="day"><strong>A typical day:</strong> Pick lists, pack orders, print labels, hand off to carrier. Handle exceptions (oversize, dangerous goods, overseas).</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>Get today's orders out the door correctly, with the right rate and the right label.</li>
+            <li>When an unusual order comes in (oversized, hazmat, international), see the special handling required.</li>
+            <li>Reconcile yesterday's shipments with carrier confirmations.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Shipping configuration. Warehouse floor execution. Returns workflow. Carrier handoff.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Order entry. Pricing. Marketing. Bookkeeping.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>99%+ same-day-ship rate for orders received before cutoff; &lt;1% mis-pick rate; shipping costs forecasted accurately.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Five plugins overlap on shipping rates with no documented precedence. They're never sure what rate the customer paid until after the fact.</div>
+    </article>
+
+    <article class="profile">
+      <div class="profile-head">
+        <span class="role">Bookkeeper / Finance</span>
+        <span class="alias">May be in-house OR external accounting firm</span>
+        <span class="stack-marker customer">Customer-side</span>
+      </div>
+      <p class="who"><strong>Who they really are:</strong> Often part-time in-house, sometimes an external accounting firm. AR/AP focused. Spreadsheet and QuickBooks-heavy.</p>
+      <p class="day"><strong>A typical day:</strong> Sync orders to QuickBooks, post payments, reconcile bank deposits, follow up on past-due AR, prepare tax reports.</p>
+      <div class="profile-grid">
+        <div>
+          <h4>Top jobs to be done</h4>
+          <ul class="jtbd-list">
+            <li>Reconcile the month without surprises.</li>
+            <li>When a customer is past due, follow up and (if approved) put their account on hold.</li>
+            <li>Generate tax reports for the accountant's quarterly filings.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What they own</h4>
+          <p>Read on orders, accounts, pricing, returns. Write on payment adjustments and credit memos. External firms get an auditable, revocable login.</p>
+          <h4 style="margin-top: 18px;">Not their job</h4>
+          <p>Catalog. Marketing. Site ops. Order entry. Shipping.</p>
+          <h4 style="margin-top: 18px;">Success looks like</h4>
+          <p>Month-end close &lt;3 business days; AR &gt; 60 days reduced quarter over quarter; zero QB-sync errors.</p>
+        </div>
+      </div>
+      <div class="frustration"><strong>Frustration today:</strong> Webgility errors require a developer to debug; no visibility into "is this customer creditworthy."</div>
+    </article>
+
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 2 : HANDOFFS & INTERFACES              -->
+  <!-- ============================================== -->
+  <section id="handoffs" class="section">
+    <div class="section-header">
+      <span class="num">02</span>
+      <h2>Handoffs &amp; Interfaces — Where Roles Meet</h2>
+    </div>
+    <p class="section-intro">Real work is collaborative. The redesign isn't just about giving each role its own swim lane; it's about making the moments WHERE roles hand off to each other clean and visible. Here are the ten most important interfaces — what triggers them, who's involved, what's exchanged, and how the new admin should change the experience.</p>
+
+    <div class="handoffs">
+
+      <article class="handoff">
+        <div class="num">01</div>
+        <div class="trigger">Trigger · New lead arrives</div>
+        <div class="title">Lead → Sales Rep assignment</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Marketing Coordinator</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Director</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Lead record + initial context + rep assignment + intake notes.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Email or spreadsheet. Often falls through the cracks.</span><br><span class="new"><strong>New:</strong> Shared lead inbox visible to Marketing, Sales Director, Regional Manager.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">02</div>
+        <div class="trigger">Trigger · Rep places contract-priced order</div>
+        <div class="title">Custom price flows to the rep</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Sales Director / Regional Mgr</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Customer-specific price list + boundaries (cannot go below threshold).</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Reps memorize or call manager. Pricing errors common.</span><br><span class="new"><strong>New:</strong> Pricing visible automatically when rep opens that buyer's order screen.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">03</div>
+        <div class="trigger">Trigger · Promotion goes live</div>
+        <div class="title">Coupon publishing</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Marketing Coordinator</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Phone Team</span>
+            <span class="role-pill">Sales Rep</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Coupon code + eligibility rules + start/end date.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Email blast to team. Reps forget. Buyers ask, reps caught off-guard.</span><br><span class="new"><strong>New:</strong> Active promos surfaced on rep order screen and Phone Team workspace.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">04</div>
+        <div class="trigger">Trigger · Order has a fulfillment problem</div>
+        <div class="title">Order issue → rep → buyer</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Order Processor / Shipping Lead</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Buyer</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Problem detail + suggested resolution + rep approval needed.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Email or Slack. Sometimes forgotten.</span><br><span class="new"><strong>New:</strong> Account flag visible on rep dashboard with "action required" status.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">05</div>
+        <div class="trigger">Trigger · Stock out during order entry</div>
+        <div class="title">Inventory shortage in real time</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Catalog Manager</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep / Phone Team</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Stock-on-hand + ETA for restock + alternative SKUs.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Stale inventory data; reps promise delivery they can't deliver.</span><br><span class="new"><strong>New:</strong> Live inventory in rep order flow; suggested alternatives on stockout.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">06</div>
+        <div class="trigger">Trigger · Discount above manager threshold</div>
+        <div class="title">Pricing exception → Owner approval</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Sales Director / Regional Mgr</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Owner</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Customer + ask + margin impact + business justification.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Phone call or email. Often delayed.</span><br><span class="new"><strong>New:</strong> Approval queue on Owner dashboard with SLA tracking.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">07</div>
+        <div class="trigger">Trigger · New rep joins the team</div>
+        <div class="title">Rep onboarding workflow</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Sales Director</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Owner (activates)</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep (joins)</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Account creation + region assignment + customer assignments + training resources.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Multiple touch points; takes days to set up.</span><br><span class="new"><strong>New:</strong> Single workflow — "add a rep" → assign + activate + onboard in one motion.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">08</div>
+        <div class="trigger">Trigger · Buyer calls with non-order question</div>
+        <div class="title">Customer service ticket lifecycle</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Phone Team / Sales Rep</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Order Processor / Shipping</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">back to caller</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Ticket + buyer + issue + resolution.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Ad-hoc; tickets get lost.</span><br><span class="new"><strong>New:</strong> Ticket queue visible in Returns &amp; Tickets area; assignable, trackable.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">09</div>
+        <div class="trigger">Trigger · Account becomes past-due</div>
+        <div class="title">AR follow-up loop</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Bookkeeper</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Sales Rep</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Buyer</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> Past-due amount + payment terms + suggested action (call, hold, write-off).</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Email; rep often unaware until customer is 90+ days overdue.</span><br><span class="new"><strong>New:</strong> AR-aging visible on rep dashboard; auto-flag at 30/60/90.</span></div>
+      </article>
+
+      <article class="handoff">
+        <div class="num">10</div>
+        <div class="trigger">Trigger · New SKUs ready to launch</div>
+        <div class="title">New product launch coordination</div>
+        <div class="flow">
+          <div class="from-to">
+            <span class="role-pill">Catalog Manager</span>
+            <span class="role-pill">Marketing Coordinator</span>
+            <span class="arrow">→</span>
+            <span class="role-pill">Phone Team / Sales Rep</span>
+          </div>
+        </div>
+        <div class="exchange"><strong>Exchanged:</strong> New SKU list + selling points + launch promo.</div>
+        <div class="compare"><span class="today"><strong>Today:</strong> Email blast; reps don't always read.</span><br><span class="new"><strong>New:</strong> "What's new this month" surfaced in rep daily snapshot.</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 3 : ROLLOUT & CHANGE PLAN              -->
+  <!-- ============================================== -->
+  <section id="rollout" class="section">
+    <div class="section-header">
+      <span class="num">03</span>
+      <h2>Rollout &amp; Change Plan</h2>
+    </div>
+    <p class="section-intro">A system-wide admin redesign is the highest-blast-radius change a SaaS can make. Going live with a "big bang" launch is the worst available path. Here's a phased rollout that minimizes disruption, validates the design with real customers, and lets Built2Buy build muscle before facing every customer at once.</p>
+
+    <div class="timeline">
+
+      <div class="phase">
+        <div class="label">Phase 1 · Internal first</div>
+        <div class="name">Built2Buy uses it on internal sandbox sites</div>
+        <div class="duration">2-3 weeks</div>
+        <div class="body">Built2Buy's own staff use the new admin to manage internal sandbox sites. Surfaces UX bugs before any customer sees them, builds support muscle, generates the runbook that customer-support staff will need.</div>
+        <div class="who"><strong>Who:</strong> Platform Operators, internal QA. <strong>Goal:</strong> Find the obvious problems while no customer is watching.</div>
+      </div>
+
+      <div class="phase">
+        <div class="label">Phase 2 · Pilot customers</div>
+        <div class="name">3-5 hand-picked customer sites</div>
+        <div class="duration">4 weeks</div>
+        <div class="body">Hand-picked sites: include at least one large customer with role specialization, one small customer where one person does everything, and one mid-size in between. Account managers run weekly check-ins. Goal: validate that the role model works for both Karen-the-everything-person AND for a 30-person dealer.</div>
+        <div class="who"><strong>Who:</strong> 3-5 selected customers + their account managers. <strong>Goal:</strong> Validate role model across customer sizes; iterate fast.</div>
+      </div>
+
+      <div class="phase">
+        <div class="label">Phase 3 · Parallel-run, opt-in</div>
+        <div class="name">Both old and new admin available</div>
+        <div class="duration">4-6 weeks</div>
+        <div class="body">Opt-in. Both old and new admin available simultaneously; customer chooses default. Built2Buy publishes which percentage of pilot customers stayed on new vs. went back. Peer pressure as marketing rather than mandate.</div>
+        <div class="who"><strong>Who:</strong> Self-selecting customers + account managers. <strong>Goal:</strong> Build evidence base; refine onboarding.</div>
+      </div>
+
+      <div class="phase">
+        <div class="label">Phase 4 · General rollout</div>
+        <div class="name">New is default; switch-back toggle visible</div>
+        <div class="duration">8-12 weeks</div>
+        <div class="body">New admin is default for new customers. Default-on for existing customers with a "switch back" toggle visible for 90 days. Track who uses the toggle and engage account managers to find out why.</div>
+        <div class="who"><strong>Who:</strong> All customers. <strong>Goal:</strong> Move 90%+ to the new admin without forcing.</div>
+      </div>
+
+      <div class="phase">
+        <div class="label">Phase 5 · Old admin sunset</div>
+        <div class="name">Hard date for retirement</div>
+        <div class="duration">Announced month 6, executed month 9</div>
+        <div class="body">Hard date, communicated relentlessly, with white-glove migration help for any customer still on the old view at month 8. Never roll a customer over during their seasonal peak.</div>
+        <div class="who"><strong>Who:</strong> Account managers + remaining holdouts. <strong>Goal:</strong> Clean retirement of the old admin.</div>
+      </div>
+
+    </div>
+
+    <div class="risks">
+      <h3>Top 5 risks to manage before launch</h3>
+      <ol>
+        <li><strong>The "Karen problem" sinks adoption if multi-role assignment isn't shipped on day one.</strong> Single-person admin is the modal user at small customers; the role-specialized model assumes a workforce most customers don't have.</li>
+        <li><strong>Built2Buy's own support team is the hidden bottleneck.</strong> If they aren't trained and runbook-ready before the first customer sees the new admin, every support call becomes a confidence-eroding event.</li>
+        <li><strong>Classic-mode toggle is necessary but dangerous.</strong> Without it the rollout risks churn; with it past 9 months you've created permanent technical debt and a two-UI support burden.</li>
+        <li><strong>Custom-role migration is the data-loss risk nobody is watching.</strong> Customers who customized their permissions via third-party plugins will silently lose configuration unless someone audits each site pre-migration.</li>
+        <li><strong>The integrator/consultant stakeholder is missing from the design and will become the loudest external critic.</strong> They influence multiple customers, see the change repeatedly, and have no formal seat at the table. Add them before launch, not after.</li>
+      </ol>
+    </div>
+
+    <div class="metrics-card">
+      <h3>Success metrics — watch these at 30/60/90 days post-launch</h3>
+      <ul>
+        <li><strong>Time-to-task</strong> for the top 10 workflows. Measured pre/post. Anything that got slower is a design failure.</li>
+        <li><strong>Support ticket volume</strong> by category. Spike in "where is X" tickets past month 2 = navigation isn't intuitive.</li>
+        <li><strong>Classic-mode toggle usage</strong> per customer. High and sticky usage at month 3 = unmet need.</li>
+        <li><strong>Role-assignment churn</strong> in the first 90 days. High churn = the role model is wrong for that customer.</li>
+        <li><strong>Feature adoption</strong> of net-new functional areas (Returns &amp; Tickets, Promotions split). Flat adoption = the surface isn't selling itself.</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <footer class="doc-footer">
+    <div>Wave 2 of an iterative design effort. <a href="/deliverables/built2buy-admin-redesign-wave-1-2026-04-25" style="color: var(--cerulean);">Wave 1 →</a> covered the stakeholder map, functional area map, and access matrix.</div>
+    <div style="margin-top: 14px;">Ideated And Architected By Steve Rice For Dotcomjungle and Built2Buy.</div>
+  </footer>
+
+</div>
+</body>
+</html>
