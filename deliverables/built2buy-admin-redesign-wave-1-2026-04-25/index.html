@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Built2Buy Admin Redesign — Stakeholder &amp; Functional Map (v2 Draft) | Wave 1</title>
+<meta name="description" content="Map-stage design for the Built2Buy admin redesign. 11 stakeholder roles, 10 functional areas, draft access matrix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cerulean: #0693e3;
+    --teal: #2DB68D;
+    --dark: #111111;
+    --soft: #8ed1fc;
+    --paper: #f7f9fb;
+    --border: #e3e8ee;
+    --muted: #6b7280;
+    --full-bg: #2DB68D;
+    --full-fg: white;
+    --read-bg: #d6ecf9;
+    --read-fg: #074d6e;
+    --none-bg: #f0f3f7;
+    --none-fg: #9aa3ad;
+    --scoped-bg: #fff7e6;
+    --scoped-fg: #8a6d1d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--dark); background: var(--paper); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 80px; }
+
+  /* Header */
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .breadcrumb a { color: var(--cerulean); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .brand-tag { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cerulean); }
+  h1 { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: clamp(32px, 4.5vw, 50px); letter-spacing: -0.02em; margin: 12px 0 12px; line-height: 1.1; color: var(--dark); }
+  .subtitle { color: var(--muted); font-size: 15px; }
+  .lede { font-size: 16px; color: #2a2f36; max-width: 800px; margin-top: 18px; }
+  .status-pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 4px 10px; background: #fff7e6; color: #8a6d1d; border-radius: 999px; margin-top: 14px; font-family: 'Urbanist', sans-serif; letter-spacing: 0.06em; }
+
+  /* Section nav */
+  .section-nav {
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    margin: 28px -28px 0;
+    padding: 14px 28px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    font-size: 13px;
+  }
+  .section-nav a { color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .section-nav a:hover { color: var(--cerulean); }
+
+  /* Foundation principle */
+  .principle {
+    background: linear-gradient(135deg, var(--cerulean), #047fc4);
+    color: white;
+    border-radius: 14px;
+    padding: 32px 36px;
+    margin-top: 48px;
+    box-shadow: 0 6px 24px rgba(6,147,227,0.18);
+  }
+  .principle .label { font-family: 'Urbanist', sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-size: 11px; font-weight: 700; opacity: 0.85; }
+  .principle blockquote { margin: 12px 0 0; font-size: clamp(17px, 1.7vw, 21px); font-weight: 500; line-height: 1.5; }
+  .principle .attrib { margin-top: 16px; font-size: 13px; opacity: 0.85; }
+
+  /* Sections */
+  .section {
+    margin-top: 80px;
+    scroll-margin-top: 70px;
+  }
+  .section-header { display: flex; align-items: baseline; gap: 18px; padding-bottom: 14px; border-bottom: 2px solid var(--cerulean); margin-bottom: 28px; flex-wrap: wrap; }
+  .section-header .num { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 36px; color: var(--cerulean); line-height: 1; }
+  .section-header h2 { font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; letter-spacing: -0.01em; }
+  .section-intro { font-size: 15px; color: #2a2f36; max-width: 820px; margin-top: 0; margin-bottom: 24px; }
+
+  /* Stack labels */
+  .stack-label { display: inline-block; font-family: 'Urbanist', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; margin-bottom: 14px; }
+  .stack-label.builttobuy { background: var(--soft); color: #074d6e; }
+  .stack-label.dealer { background: #d8f4ea; color: #0d6d4f; }
+  .substack { margin-top: 36px; }
+  .substack h3 { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 22px; margin: 0 0 6px; }
+
+  /* Cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 22px 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(17,17,17,0.06); }
+  .card .role { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 17px; color: var(--dark); }
+  .card .alias { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .card .desc { font-size: 14px; color: #2a2f36; margin-top: 12px; }
+  .card .meta { font-size: 12px; color: var(--muted); margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+  .card .meta strong { color: var(--dark); font-weight: 600; }
+  .card .jtbd { margin-top: 10px; padding: 10px 12px; background: var(--paper); border-left: 3px solid var(--teal); border-radius: 0 6px 6px 0; font-size: 13px; color: #2a2f36; font-style: italic; }
+  .builttobuy-card { background: linear-gradient(135deg, white, #eaf6fd); border: 1px solid var(--soft); }
+
+  /* Functional area cards */
+  .areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+  .area { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; position: relative; overflow: hidden; }
+  .area::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--cerulean); }
+  .area.platform-only::before { background: #8a6d1d; }
+  .area-num { position: absolute; top: 18px; right: 22px; font-family: 'Urbanist', sans-serif; font-weight: 800; font-size: 36px; color: #f0f4f8; line-height: 1; }
+  .area .noun { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 18px; color: var(--dark); padding-right: 40px; }
+  .area .verb { font-size: 13px; color: var(--cerulean); font-weight: 500; margin-top: 4px; padding-right: 40px; }
+  .area .desc { font-size: 14px; color: #2a2f36; margin-top: 14px; }
+  .area .lives { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--muted); }
+  .area .lives strong { color: var(--dark); font-weight: 600; }
+  .badge { display: inline-block; font-family: 'Urbanist', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; margin-top: 10px; }
+  .badge.platform { background: #fff7e6; color: #8a6d1d; }
+  .badge.activated { background: #d8f4ea; color: #0d6d4f; }
+
+  /* Matrix */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; padding: 16px 20px; background: white; border: 1px solid var(--border); border-radius: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #2a2f36; }
+  .swatch { display: inline-block; width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06); }
+  .swatch.full { background: var(--full-bg); }
+  .swatch.read { background: var(--read-bg); }
+  .swatch.none { background: var(--none-bg); }
+  .swatch.scoped { background: var(--scoped-bg); }
+
+  .matrix-wrap { overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+  table.matrix { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1100px; font-size: 12px; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(17,17,17,0.05); }
+  table.matrix th, table.matrix td { padding: 10px 8px; text-align: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); vertical-align: middle; }
+  table.matrix th:last-child, table.matrix td:last-child { border-right: none; }
+  table.matrix tr:last-child td { border-bottom: none; }
+  table.matrix thead th { background: var(--paper); font-family: 'Urbanist', sans-serif; font-weight: 700; color: var(--dark); font-size: 11px; line-height: 1.25; padding: 14px 6px; }
+  table.matrix thead th:first-child { background: white; text-align: left; padding-left: 16px; }
+  table.matrix tbody th { text-align: left; padding-left: 16px; background: white; font-weight: 600; color: var(--dark); font-size: 13px; font-family: 'Urbanist', sans-serif; border-right: 2px solid var(--border); min-width: 220px; }
+  table.matrix tbody th .alias { display: block; font-size: 10px; color: var(--muted); font-weight: 400; font-family: 'Inter', sans-serif; margin-top: 2px; }
+  .cell { font-family: 'Urbanist', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; }
+  .cell.full { background: var(--full-bg); color: var(--full-fg); }
+  .cell.read { background: var(--read-bg); color: var(--read-fg); }
+  .cell.none { background: var(--none-bg); color: var(--none-fg); }
+  .cell.scoped { background: var(--scoped-bg); color: var(--scoped-fg); }
+  .cell sup { font-size: 9px; font-weight: 600; opacity: 0.85; vertical-align: super; }
+  .builttobuy-row th { background: linear-gradient(90deg, #eaf6fd, white); border-left: 4px solid var(--cerulean); padding-left: 12px; }
+  .platform-col { background: #fff7e6 !important; }
+
+  .notes { margin-top: 28px; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .notes h3 { font-family: 'Urbanist', sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 10px; }
+  .notes ol { margin: 8px 0 0; padding-left: 22px; font-size: 13px; color: #2a2f36; }
+  .notes li { margin-bottom: 8px; }
+  .notes li strong { color: var(--dark); }
+
+  .open-questions { margin-top: 22px; background: #fff7e6; border: 1px solid #f0d9a8; border-radius: 12px; padding: 20px 24px; }
+  .open-questions h3 { font-family: 'Urbanist', sans-serif; color: #8a6d1d; font-size: 16px; font-weight: 700; margin: 0 0 10px; }
+  .open-questions ul { margin: 10px 0 0; padding-left: 22px; font-size: 13px; }
+  .open-questions li { margin-bottom: 6px; }
+
+  /* Footer */
+  .doc-footer { margin-top: 90px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="breadcrumb"><a href="/">← Built2Buy Public</a> &nbsp;/&nbsp; Wave 1</div>
+    <div class="brand-tag">Built2Buy · Admin Redesign · Wave 1</div>
+    <h1>Stakeholder &amp; Functional Map</h1>
+    <div class="subtitle">v2 Draft · April 25, 2026 · Authored by Seven for Steve Rice</div>
+    <p class="lede">A map-stage design for the new Built2Buy administration panel. The current admin is organized around plugins (~50 of them, sprawling). The new admin will be organized around the people who do the work and the work they do. This document defines who those people are, what work they own, and how they share the system.</p>
+    <span class="status-pill">v2 Draft · iterating · not yet a build-ready engineering brief</span>
+
+    <nav class="section-nav">
+      <a href="#principle">Foundation</a>
+      <a href="#stakeholders">Stakeholders</a>
+      <a href="#areas">Functional Areas</a>
+      <a href="#matrix">Access Matrix</a>
+    </nav>
+  </header>
+
+  <section id="principle" class="principle">
+    <div class="label">Foundation Principle</div>
+    <blockquote>Built2Buy defines the lanes because we know how businesses work. Customers choose which roles they need; the role definitions themselves are platform-controlled. The strength we bring is keeping people in their lane — preventing one stakeholder from working inside someone else's job.</blockquote>
+    <div class="attrib">— Steve Rice, April 25, 2026</div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 1 : STAKEHOLDER MAP                    -->
+  <!-- ============================================== -->
+  <section id="stakeholders" class="section">
+    <div class="section-header">
+      <span class="num">01</span>
+      <h2>Stakeholder Map</h2>
+    </div>
+    <p class="section-intro">Eleven stakeholder roles across two stacks. The Built2Buy super-admin is the platform side — that's us. The customer stakeholders are the ten roles inside our customer organizations (the wholesale distribution companies who use Built2Buy).</p>
+
+    <div class="substack">
+      <h3>Built2Buy Super-Admin</h3>
+      <span class="stack-label builttobuy">Platform-side · 1 role</span>
+      <div class="grid">
+        <article class="card builttobuy-card">
+          <div class="role">Platform Operator</div>
+          <div class="alias">v1 name: Built2Buy Super-Admin</div>
+          <div class="desc">Built2Buy staff. Runs the multi-tenant platform across all customer instances. Provisions sites, deploys updates, sees telemetry across the fleet, owns integrations.</div>
+          <div class="jtbd">When a customer reports a bug, reproduce it without disrupting their site, so I can fix before they call back.</div>
+          <div class="meta"><strong>Real at:</strong> Built2Buy itself · Never present at any customer site.</div>
+        </article>
+      </div>
+    </div>
+
+    <div class="substack">
+      <h3>Customer Stakeholders</h3>
+      <span class="stack-label dealer">Customer-side · 10 roles</span>
+      <div class="grid">
+
+        <article class="card">
+          <div class="role">Owner</div>
+          <div class="alias">The customer's top admin</div>
+          <div class="desc">Final authority on margin, pricing policy, role assignments. Mostly logs in for dashboards and approvals, not daily admin work.</div>
+          <div class="jtbd">Open the system Monday morning, know in 30 seconds if the business is healthy.</div>
+          <div class="meta"><strong>Real at:</strong> Every customer.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Sales Director</div>
+          <div class="alias">Top of the sales hierarchy</div>
+          <div class="desc">Sees and acts on all sales activity. Manages Regional Sales Managers. Sets sales policy and targets.</div>
+          <div class="jtbd">Know how the sales team is performing this week, by region and by rep.</div>
+          <div class="meta"><strong>Real at:</strong> Mid-to-large customers (~$10M+) · At smaller customers, this is the Owner with a hat on.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Regional Sales Manager</div>
+          <div class="alias">also: Internal Sales Rep</div>
+          <div class="desc">Manages reps in their region. Sees their region's accounts and orders. Doubles as customer support for those accounts.</div>
+          <div class="jtbd">When a rep is underperforming, see what's happening with their accounts so I can coach or reassign.</div>
+          <div class="meta"><strong>Real at:</strong> Mid-to-large customers.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Phone Team</div>
+          <div class="alias">Desk module</div>
+          <div class="desc">Desk-based order entry for ALL accounts. Doubles as customer support — handles "where's my order?", returns, balance questions. Does not configure anything.</div>
+          <div class="jtbd">Place a buyer's order in under two minutes while they're on the phone.</div>
+          <div class="meta"><strong>Real at:</strong> All customers above ~$2M revenue.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Field Sales Rep</div>
+          <div class="alias">also: Outside Sales Rep</div>
+          <div class="desc">Sees only their assigned accounts. Places orders for those. Doubles as customer support for them. Often mobile — at a buyer's site or in transit.</div>
+          <div class="jtbd">When in front of a buyer, place their order on the spot without looking like an IT person.</div>
+          <div class="meta"><strong>Real at:</strong> All customers · Mobile-first context where present.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Marketing Coordinator</div>
+          <div class="alias">v1 name: Marketing Manager</div>
+          <div class="desc">Site content, banners, email blasts, promotions, GA. Owns coupons but NOT list pricing. Often part-time or outsourced at small customers.</div>
+          <div class="jtbd">When a promotion runs, get it onto the site and to buyers in one motion.</div>
+          <div class="meta"><strong>Real at:</strong> $5M+ customers · Below that, this is the Owner or a contractor.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Catalog Manager</div>
+          <div class="alias">also: Buyer / Category Manager</div>
+          <div class="desc">Loads and maintains products, attributes, images, and cost. <strong>Read-only on sell price</strong> (Owner and Sales Director set sell price; Catalog Manager loads cost).</div>
+          <div class="jtbd">When new products arrive, add them in bulk without typing every field.</div>
+          <div class="meta"><strong>Real at:</strong> $3M+ customers · Often the most spreadsheet-fluent person in the building.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Order Processor</div>
+          <div class="alias">Office side</div>
+          <div class="desc">Office-based. Processes incoming orders end-to-end through invoicing. Handles order edits, customer-comms about order status. Does not configure shipping rules.</div>
+          <div class="jtbd">Process orders to shipped without re-keying anything.</div>
+          <div class="meta"><strong>Real at:</strong> All customers · At small customers may be the Phone Team.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Shipping &amp; Warehouse Lead</div>
+          <div class="alias">Floor side · includes warehouse picking</div>
+          <div class="desc">Configures shipping rules, runs the warehouse floor, picks/packs/labels. Owns the shipping rate aggregator. Tablet-friendly UI needed.</div>
+          <div class="jtbd">Get today's orders out the door correctly, with the right rate and the right label.</div>
+          <div class="meta"><strong>Real at:</strong> All customers · Owner does this at the smallest customers.</div>
+        </article>
+
+        <article class="card">
+          <div class="role">Bookkeeper / Finance</div>
+          <div class="alias">May be in-house OR external accounting firm</div>
+          <div class="desc">AR/AP, QuickBooks sync via Webgility, tax reports, invoice and payment records. Read-heavy on orders, write on financial adjustments.</div>
+          <div class="jtbd">Reconcile the month without surprises.</div>
+          <div class="meta"><strong>Real at:</strong> All customers · External firms need their own auditable login.</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 2 : FUNCTIONAL AREA MAP                -->
+  <!-- ============================================== -->
+  <section id="areas" class="section">
+    <div class="section-header">
+      <span class="num">02</span>
+      <h2>Functional Area Map</h2>
+    </div>
+    <p class="section-intro">The other axis. Ten functional areas, dual-named: a noun (what it is) and a verb (what gets done). The final UI may use one or the other; we keep both during the design phase. Areas are platform-defined; customers enable subsets per their needs but cannot redefine them.</p>
+
+    <div class="areas">
+
+      <article class="area">
+        <div class="area-num">01</div>
+        <div class="noun">Orders &amp; Fulfillment</div>
+        <div class="verb">Process orders</div>
+        <div class="desc">Order entry, editing, processing through to invoicing. Customer-comms about order status.</div>
+        <div class="lives"><strong>What lives here:</strong> WC Orders, dcj-admin-order-entry, PDF Invoices, Webgility order sync, checkout field editor, customer addresses on orders.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">02</div>
+        <div class="noun">Shipping</div>
+        <div class="verb">Configure shipping</div>
+        <div class="desc">Carrier setup, rate rules, zones, methods. <strong>Single rate aggregator</strong> resolving the 5-plugin overlap into one canonical "what rate fires" view.</div>
+        <div class="lives"><strong>What lives here:</strong> WC Shipping Zones, table-rate-shipping, dcj-ups-live-rates, dcj-collect-shipping-option, Wholesale Suite shipping logic.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">03</div>
+        <div class="noun">Pricing &amp; Promotions</div>
+        <div class="verb">Set prices and promotions</div>
+        <div class="desc">List pricing, wholesale tiers, customer-specific contract pricing, coupons, payment terms. <strong>Owner has final margin authority.</strong></div>
+        <div class="lives"><strong>What lives here:</strong> WC product pricing, wholesale-prices, wholesale-prices-premium, auto-added-coupons-pro, dcj-terms-gateway, WC Coupons.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">04</div>
+        <div class="noun">Accounts</div>
+        <div class="verb">Manage customers and leads</div>
+        <div class="desc">Buyer directory, lead approval workflow, role assignment, contact records, account notes.</div>
+        <div class="lives"><strong>What lives here:</strong> WC Customers, WP Users, woocommerce-wholesale-lead-capture, users-customers-import-export, user-switching, wholesale role assignment.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">05</div>
+        <div class="noun">The Catalog</div>
+        <div class="verb">Maintain the catalog</div>
+        <div class="desc">Products, attributes, categories, galleries, filters. Cost loading and product data entry.</div>
+        <div class="lives"><strong>What lives here:</strong> WC Products, WC Categories/Tags/Attributes, gallery-slider-for-woocommerce, product-video-gallery-slider, filter-everything, ACF product fields.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">06</div>
+        <div class="noun">The Website</div>
+        <div class="verb">Build and maintain the website</div>
+        <div class="desc">Pages, posts, page builder, banners, sidebars, media library. Absorbs the old "Media &amp; Assets" area.</div>
+        <div class="lives"><strong>What lives here:</strong> WP Posts/Pages, Elementor + Pro, ACF Pro, duplicate-page, woosidebars, dcj-global-banners, media library, alt-text tooling.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">07</div>
+        <div class="noun">Marketing &amp; Analytics</div>
+        <div class="verb">Run marketing</div>
+        <div class="desc">Promotional campaigns, GA tracking, sales analytics, marketing email, reports.</div>
+        <div class="lives"><strong>What lives here:</strong> WC Marketing, woocommerce-google-analytics-integration, WC Reports + Analytics, wp-mail-smtp (when used for marketing email), add-email-signature.</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">08</div>
+        <div class="noun">Site Operations</div>
+        <div class="verb">Keep the site running</div>
+        <div class="desc">WP/site settings, themes, email/SMTP, branding, plugin status, <strong>tax configuration</strong>.</div>
+        <div class="lives"><strong>What lives here:</strong> WP Settings, WP Appearance, WC Settings (general/advanced/tax), built2buy-helper settings, wp-mail-smtp config, admin-notices-manager.</div>
+      </article>
+
+      <article class="area platform-only">
+        <div class="area-num">09</div>
+        <div class="noun">Platform</div>
+        <div class="verb">Run the platform</div>
+        <div class="desc">Multi-tenant operations, dev tools, and <strong>integrations</strong>. Built2Buy super-admins only — never visible to customers.</div>
+        <div class="lives"><strong>What lives here:</strong> Network Admin, NS Cloner, Query Monitor, Redis Cache, ManageWP Worker, woo-update-manager, integration credentials (QB/Webgility, UPS API, EDI, marketplaces).</div>
+        <div class="badge platform">Platform-only</div>
+      </article>
+
+      <article class="area">
+        <div class="area-num">10</div>
+        <div class="noun">Returns &amp; Tickets</div>
+        <div class="verb">Handle returns and customer issues</div>
+        <div class="desc">RMA workflow, restocking fees, condition grading, vendor chargebacks, customer-service tickets. Currently scattered; this is the new home.</div>
+        <div class="lives"><strong>What lives here:</strong> Today: nothing formal — handled via order edits and email. After redesign: a dedicated returns workflow + ticket queue.</div>
+        <div class="badge activated">Newly activated</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 3 : ACCESS MATRIX                      -->
+  <!-- ============================================== -->
+  <section id="matrix" class="section">
+    <div class="section-header">
+      <span class="num">03</span>
+      <h2>Access Matrix</h2>
+    </div>
+    <p class="section-intro">Each cell shows the proposed access level for that role × functional area combination. This is a draft — open questions and edge cases (regional scope, in-area splits like pricing-vs-promotions) are footnoted below the matrix.</p>
+
+    <div class="legend">
+      <div class="legend-item"><span class="swatch full"></span> Full access</div>
+      <div class="legend-item"><span class="swatch read"></span> Read-only</div>
+      <div class="legend-item"><span class="swatch scoped"></span> Scoped (region or assigned-only)</div>
+      <div class="legend-item"><span class="swatch none"></span> No access</div>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Role &nbsp; ↓ &nbsp; Area →</th>
+            <th>Orders &amp; Fulfillment</th>
+            <th>Shipping</th>
+            <th>Pricing &amp; Promotions</th>
+            <th>Accounts</th>
+            <th>The Catalog</th>
+            <th>The Website</th>
+            <th>Marketing &amp; Analytics</th>
+            <th>Site Operations</th>
+            <th class="platform-col">Platform</th>
+            <th>Returns &amp; Tickets</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="builttobuy-row">
+            <th>Platform Operator <span class="alias">Built2Buy super-admin</span></th>
+            <td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full platform-col">FULL</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Owner</th>
+            <td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL <sup>1</sup></td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell none platform-col">—</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Sales Director</th>
+            <td class="cell full">FULL</td><td class="cell read">READ</td><td class="cell full">FULL <sup>2</sup></td><td class="cell full">FULL</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Regional Sales Manager</th>
+            <td class="cell scoped">REGION <sup>3</sup></td><td class="cell none">—</td><td class="cell scoped">REGION <sup>3</sup></td><td class="cell scoped">REGION <sup>3</sup></td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell scoped">REGION <sup>3</sup></td>
+          </tr>
+          <tr>
+            <th>Phone Team <span class="alias">desk module · sees ALL accounts</span></th>
+            <td class="cell full">FULL</td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell read">READ <sup>4</sup></td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Field Sales Rep <span class="alias">field module · assigned accounts only</span></th>
+            <td class="cell scoped">ASSIGNED <sup>5</sup></td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell scoped">ASSIGNED <sup>5</sup></td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell scoped">ASSIGNED <sup>5</sup></td>
+          </tr>
+          <tr>
+            <th>Marketing Coordinator</th>
+            <td class="cell none">—</td><td class="cell none">—</td><td class="cell scoped">PROMOS <sup>6</sup></td><td class="cell read">READ</td><td class="cell read">READ</td><td class="cell full">FULL</td><td class="cell full">FULL</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell none">—</td>
+          </tr>
+          <tr>
+            <th>Catalog Manager <span class="alias">aka Buyer / Category Manager</span></th>
+            <td class="cell none">—</td><td class="cell none">—</td><td class="cell scoped">COST ONLY <sup>7</sup></td><td class="cell none">—</td><td class="cell full">FULL</td><td class="cell read">READ</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell read">READ</td>
+          </tr>
+          <tr>
+            <th>Order Processor</th>
+            <td class="cell full">FULL</td><td class="cell read">READ</td><td class="cell read">READ</td><td class="cell read">READ <sup>4</sup></td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Shipping &amp; Warehouse Lead</th>
+            <td class="cell read">READ</td><td class="cell full">FULL</td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell full">FULL</td>
+          </tr>
+          <tr>
+            <th>Bookkeeper / Finance</th>
+            <td class="cell read">READ</td><td class="cell none">—</td><td class="cell read">READ</td><td class="cell read">READ</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none">—</td><td class="cell none platform-col">—</td><td class="cell read">READ <sup>8</sup></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="notes">
+      <h3>Footnotes — where cells need extra detail</h3>
+      <ol>
+        <li><strong>Owner pricing — full authority.</strong> Owner sets list prices, margin policy, pricing tiers. Sales Director and Regional Sales Manager negotiate within Owner-set boundaries.</li>
+        <li><strong>Sales Director pricing — customer-specific contracts.</strong> Sets account-level pricing within Owner-set policy. Cannot change list prices or margin floors without Owner approval.</li>
+        <li><strong>Regional scope.</strong> Sees and acts on accounts within their assigned region only. Does not see other regions' orders, customers, or pricing.</li>
+        <li><strong>Account writes vs. reads.</strong> Phone Team and Order Processor can write contact notes, billing/shipping addresses, and order-related fields, but cannot create new accounts or change role assignments.</li>
+        <li><strong>Assigned-account scope.</strong> Field Sales Rep sees and acts on only their assigned accounts. Orders, accounts, and tickets all scoped to that list.</li>
+        <li><strong>Marketing — promotions only, not list pricing.</strong> Marketing Coordinator owns coupons, promo campaigns, marketing-driven discounts. Read-only on list/wholesale prices. The "Pricing &amp; Promotions" area may need to split into two for the engineering brief.</li>
+        <li><strong>Catalog Manager — cost only, not sell price.</strong> Loads vendor cost on products, but cannot edit sell price. Sell-price authority belongs to Owner / Sales Director, not the buyer/catalog person.</li>
+        <li><strong>Bookkeeper on returns.</strong> Read-only on the financial side of returns (refund amounts, credit memos). Does not approve or process returns themselves — that's Order Processor and Shipping &amp; Warehouse Lead.</li>
+      </ol>
+    </section>
+
+    <section class="open-questions">
+      <h3>Open questions to resolve before this matrix locks</h3>
+      <ul>
+        <li>Should the "Pricing &amp; Promotions" area split into two (List Pricing + Promotions) so Marketing's promo-only authority becomes a clean cell?</li>
+        <li>Is "Regional Sales Manager region scope" something every customer configures, or only mid+ customers? (Affects whether the role exists on small-customer instances at all.)</li>
+        <li>Does Sales Director have any access to The Website (read-only on what's published) or none?</li>
+        <li>Should Shipping &amp; Warehouse Lead have any access to Pricing &amp; Promotions (e.g., shipping-cost components surface in pricing logic)?</li>
+        <li>External Bookkeeper (accounting firm) login — does it inherit the same matrix row, or get a stricter read-only-everywhere variant?</li>
+      </ul>
+    </section>
+  </section>
+
+  <footer class="doc-footer">
+    <div>Wave 1 of an iterative design effort. Wave 2 will add stakeholder deep-dive profiles, an inter-role handoff diagram, and a phased rollout plan.</div>
+    <div style="margin-top: 14px;">Ideated And Architected By Steve Rice For Dotcomjungle and Built2Buy.</div>
+  </footer>
+
+</div>
+</body>
+</html>
