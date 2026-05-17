@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Commission Projection | Built2Buy</title>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a6fa8;
+    --accent: #0693e3;
+    --teal: #2DB68D;
+    --dark: #111111;
+    --light: #f0f2f5;
+    --border: #e2e8f0;
+    --muted: #6b7280;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--dark);
+    line-height: 1.5;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    background: #fff;
+  }
+
+  /* Page header */
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--teal);
+  }
+  .brand {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .page-header h1 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.02em;
+  }
+  .page-header p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 640px;
+  }
+
+  /* Comp plan inputs */
+  .comp-plan {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 640px) { .comp-plan { grid-template-columns: repeat(2, 1fr); } }
+
+  .comp-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .comp-card label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .comp-input-row {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .comp-prefix, .comp-suffix {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .comp-card input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+    outline: none;
+    padding: 0;
+    min-width: 0;
+  }
+
+  /* Summary strip */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 640px) { .summary-strip { grid-template-columns: repeat(2, 1fr); } }
+
+  .sum-card {
+    background: var(--light);
+    border-radius: 6px;
+    padding: 14px 12px;
+    border-top: 2px solid var(--teal);
+  }
+  .sum-card .val {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .sum-card .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    font-weight: 600;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #bbb;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* Cashflow table */
+  .table-wrap { overflow-x: auto; }
+  table.cashflow {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 700px;
+  }
+
+  /* Group headers */
+  .cashflow thead tr.group-row th {
+    padding: 5px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border-bottom: none;
+  }
+  .group-blue { background: #1a6fa8; color: #fff; }
+  .group-green { background: #1a8c5e; color: #fff; }
+
+  .cashflow thead tr.col-row th {
+    background: #2a2f36;
+    color: rgba(255,255,255,0.85);
+    padding: 6px 8px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+  .cashflow thead tr.col-row th:first-child,
+  .cashflow thead tr.col-row th:nth-child(2) { text-align: center; }
+
+  /* Body */
+  .cashflow tbody td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f0f2f5;
+    text-align: right;
+    white-space: nowrap;
+    color: #444;
+    vertical-align: middle;
+  }
+  .cashflow tbody td:first-child { text-align: center; font-weight: 700; color: var(--primary); }
+  .cashflow tbody td:nth-child(2) { text-align: center; }
+  .cashflow tbody tr:nth-child(even) td { background: #fafbfc; }
+  .cashflow tbody tr.year-boundary td { border-top: 2px solid var(--teal); }
+
+  /* Editable new-deals cell */
+  .deals-input {
+    width: 44px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    padding: 2px 4px;
+    border-radius: 3px;
+    outline: none;
+    cursor: default;
+  }
+  .deals-input:focus {
+    border-color: var(--accent);
+    background: #fff;
+    cursor: text;
+  }
+
+  /* Highlight cells */
+  .cell-total { font-weight: 600; color: var(--primary); }
+  .cell-cumul  { font-weight: 700; color: var(--dark); }
+  .cell-trail  { color: var(--teal); font-weight: 600; }
+  .cell-y2     { color: #888; }
+
+  .y2-badge {
+    display: inline-block;
+    font-size: 9px;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-right: 4px;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+
+  .reset-btn {
+    margin-top: 12px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .disclaimer {
+    margin-top: 12px;
+    font-size: 11px;
+    color: #bbb;
+    line-height: 1.5;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: #bbb;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Built2Buy</div>
+  <h1>Sales Commission Projection</h1>
+  <p>24-month commission projection for Built2Buy sales reps — recruiting baseline. Edit deals per month in the table or adjust the comp plan inputs above. All numbers update instantly.</p>
+</div>
+
+<!-- Comp plan inputs -->
+<span class="section-label">Comp Plan</span>
+<div class="comp-plan">
+  <div class="comp-card">
+    <label for="y1-rate">Year 1 rate</label>
+    <div class="comp-input-row">
+      <input type="number" id="y1-rate" value="20" min="0" max="100" step="0.1" oninput="render()">
+      <span class="comp-suffix">%</span>
+    </div>
+  </div>
+  <div class="comp-card">
+    <label for="y2-rate">Year 2 rate</label>
+    <div class="comp-input-row">
+      <input type="number" id="y2-rate" value="5" min="0" max="100" step="0.1" oninput="render()">
+      <span class="comp-suffix">%</span>
+    </div>
+  </div>
+  <div class="comp-card">
+    <label for="avg-arr">Avg ARR per deal</label>
+    <div class="comp-input-row">
+      <span class="comp-prefix">$</span>
+      <input type="number" id="avg-arr" value="12000" min="0" step="500" oninput="render()">
+    </div>
+  </div>
+  <div class="comp-card">
+    <label for="avg-install">Avg install per deal</label>
+    <div class="comp-input-row">
+      <span class="comp-prefix">$</span>
+      <input type="number" id="avg-install" value="5000" min="0" step="500" oninput="render()">
+    </div>
+  </div>
+</div>
+
+<!-- Summary strip -->
+<span class="section-label">At Full Ramp</span>
+<div class="summary-strip">
+  <div class="sum-card"><div class="val" id="sum-peak-monthly"></div><div class="lbl">Peak monthly</div></div>
+  <div class="sum-card"><div class="val" id="sum-peak-trail"></div><div class="lbl">Peak trailing 12</div></div>
+  <div class="sum-card"><div class="val" id="sum-total-24"></div><div class="lbl">24-month total</div></div>
+  <div class="sum-card"><div class="val" id="sum-cumul-24"></div><div class="lbl">Cumulative at month 24</div></div>
+</div>
+
+<!-- Cashflow table -->
+<span class="section-label">Month-by-Month Projection</span>
+<div class="table-wrap">
+  <table class="cashflow">
+    <thead>
+      <tr class="group-row">
+        <th colspan="2" class="group-blue">Pipeline</th>
+        <th colspan="3" class="group-green">Commission breakdown</th>
+        <th colspan="3" class="group-blue">Totals</th>
+      </tr>
+      <tr class="col-row">
+        <th>Mo</th>
+        <th>New Deals</th>
+        <th>Install</th>
+        <th>Y1 Sub</th>
+        <th>Y2 Sub</th>
+        <th>This Month</th>
+        <th>Trailing 12</th>
+        <th>Cumulative</th>
+      </tr>
+    </thead>
+    <tbody id="cashflow-tbody"></tbody>
+  </table>
+</div>
+
+<button class="reset-btn" onclick="resetDeals()">Reset deals to baseline</button>
+
+<p class="disclaimer">
+  Commission math: install paid in deal month at Y1 rate; subscription commission paid monthly for 12 months at Y1 rate, then 12 months at Y2 rate. All figures are projections only.
+</p>
+
+<div class="footer">Built2Buy &middot; built2buy.com &middot; Ideated And Architected By Steve Rice For Dotcomjungle and Built2Buy.</div>
+
+<script>
+// Canonical defaults matching the Bridge recruiting-baseline scorecard
+const DEFAULT_RAMP = [1,2,2,3,3,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,6,6,6,6];
+let deals = [...DEFAULT_RAMP];
+
+const el = id => document.getElementById(id);
+const $ = cents => '$' + Math.round(cents / 100).toLocaleString();
+
+function applyRate(cents, bps) { return Math.round((cents * bps) / 10000); }
+function monthlyArr(arrCents) { return Math.floor(arrCents / 12); }
+
+function computeCashflow(newDealsArr, y1Bps, y2Bps, arrCents, installCents) {
+  const N = 24;
+  const rows = Array.from({ length: N }, (_, i) => ({
+    mo: i + 1,
+    newDeals: newDealsArr[i] || 0,
+    install: 0,
+    y1sub: 0,
+    y2sub: 0,
+    total: 0,
+    trail: 0,
+    cumul: 0,
+  }));
+
+  const monthlySubSlice = monthlyArr(arrCents);
+  const installPerDeal  = applyRate(installCents, y1Bps);
+  const y1MonthlyPerDeal = applyRate(monthlySubSlice, y1Bps);
+  const y2MonthlyPerDeal = applyRate(monthlySubSlice, y2Bps);
+
+  for (let n = 1; n <= N; n++) {
+    const count = rows[n - 1].newDeals;
+    if (!count) continue;
+    rows[n - 1].install += installPerDeal * count;
+    for (let off = 0; off < 12; off++) { if (n + off <= N) rows[n + off - 1].y1sub += y1MonthlyPerDeal * count; }
+    for (let off = 12; off < 24; off++) { if (n + off <= N) rows[n + off - 1].y2sub += y2MonthlyPerDeal * count; }
+  }
+
+  let cumul = 0;
+  for (const r of rows) {
+    r.total = r.install + r.y1sub + r.y2sub;
+    cumul += r.total;
+    r.cumul = cumul;
+  }
+  for (let i = 0; i < rows.length; i++) {
+    let sum = 0;
+    for (let j = Math.max(0, i - 11); j <= i; j++) sum += rows[j].total;
+    rows[i].trail = sum;
+  }
+  return rows;
+}
+
+function render() {
+  const y1Bps      = Math.round((parseFloat(el('y1-rate').value) || 0) * 100);
+  const y2Bps      = Math.round((parseFloat(el('y2-rate').value) || 0) * 100);
+  const arrCents   = Math.round((parseFloat(el('avg-arr').value) || 0) * 100);
+  const instCents  = Math.round((parseFloat(el('avg-install').value) || 0) * 100);
+
+  const rows = computeCashflow(deals, y1Bps, y2Bps, arrCents, instCents);
+
+  // Summary strip
+  const peakMonthly = Math.max(...rows.map(r => r.total));
+  const peakTrail   = Math.max(...rows.map(r => r.trail));
+  const total24     = rows[23].cumul;
+  el('sum-peak-monthly').textContent = $(peakMonthly);
+  el('sum-peak-trail').textContent   = $(peakTrail);
+  el('sum-total-24').textContent     = $(total24);
+  el('sum-cumul-24').textContent     = $(total24);
+
+  // Table
+  const tbody = el('cashflow-tbody');
+  tbody.innerHTML = '';
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    if (i === 12) tr.className = 'year-boundary';
+
+    // Month
+    const tdMo = document.createElement('td');
+    if (i === 12) { const b = document.createElement('span'); b.className = 'y2-badge'; b.textContent = 'Y2'; tdMo.appendChild(b); }
+    tdMo.appendChild(document.createTextNode(String(r.mo)));
+    tr.appendChild(tdMo);
+
+    // New Deals (editable)
+    const tdDeals = document.createElement('td');
+    const inp = document.createElement('input');
+    inp.type = 'number';
+    inp.className = 'deals-input';
+    inp.value = r.newDeals;
+    inp.min = 0;
+    inp.max = 99;
+    inp.dataset.idx = i;
+    inp.addEventListener('change', function() {
+      deals[parseInt(this.dataset.idx)] = Math.max(0, parseInt(this.value) || 0);
+      render();
+    });
+    tdDeals.appendChild(inp);
+    tr.appendChild(tdDeals);
+
+    // Commission breakdown
+    const cells = [
+      { val: r.install, cls: '' },
+      { val: r.y1sub,   cls: '' },
+      { val: r.y2sub,   cls: 'cell-y2' },
+      { val: r.total,   cls: 'cell-total' },
+      { val: r.trail,   cls: 'cell-trail' },
+      { val: r.cumul,   cls: 'cell-cumul' },
+    ];
+    cells.forEach(({ val, cls }) => {
+      const td = document.createElement('td');
+      if (cls) td.className = cls;
+      td.textContent = $(val);
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+function resetDeals() {
+  deals = [...DEFAULT_RAMP];
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
