@@ -6,497 +6,382 @@
 <title>Sales Rep Commission Calculator | Built2Buy</title>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #1a6fa8;
-    --accent: #0693e3;
-    --teal: #2DB68D;
-    --dark: #111111;
-    --light: #f0f2f5;
-    --border: #e2e8f0;
-    --muted: #6b7280;
-    --green: #1a7a52;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    color: var(--dark);
-    line-height: 1.5;
-    max-width: 1020px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem 5rem;
-    background: #fff;
-  }
+:root {
+  --cerulean: #0693e3;
+  --teal: #2DB68D;
+  --dark-blue: #1a6fa8;
+  --ink: #111111;
+  --white: #ffffff;
+  --surface: #f0f2f5;
+  --border: #e2e8f0;
+  --text-muted: #6b7280;
+  --shadow: 0 1px 4px rgba(0,0,0,0.07);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);line-height:1.5;background:var(--surface);-webkit-font-smoothing:antialiased;}
+h1,h2{font-family:'Urbanist',sans-serif;}
 
-  /* Header */
-  .eyebrow {
-    font-family: 'Urbanist', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-  h1 {
-    font-family: 'Urbanist', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--dark);
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-  }
-  .subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 2rem;
-    max-width: 640px;
-  }
-  .divider { border: none; border-top: 3px solid var(--teal); margin-bottom: 2rem; }
+/* Present page layout */
+.commission-present{min-height:100vh;background:var(--surface);padding:2.5rem 1.25rem 4rem;}
+.commission-present-inner{max-width:920px;margin:0 auto;}
+.commission-present-eyebrow{text-transform:uppercase;font-size:.78rem;letter-spacing:.08em;color:var(--cerulean);font-weight:700;margin-bottom:.4rem;}
+.page-title{font-family:'Urbanist',sans-serif;font-size:2rem;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin:.25rem 0 .5rem;}
+.page-subtitle{color:var(--text-muted);font-size:.95rem;margin-bottom:1.5rem;}
 
-  /* Summary tiles */
-  .summary-tiles {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 2rem;
-  }
-  @media (max-width: 580px) { .summary-tiles { grid-template-columns: 1fr; } }
-  .tile {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 20px;
-  }
-  .tile.emphasis {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
-  }
-  .tile-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .tile.emphasis .tile-label { color: rgba(255,255,255,0.75); }
-  .tile-amount {
-    font-family: 'Urbanist', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .tile.emphasis .tile-amount { color: #fff; }
-  .tile-help { font-size: 12px; color: var(--muted); }
-  .tile.emphasis .tile-help { color: rgba(255,255,255,0.7); }
+/* Summary tiles */
+.commission-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.75rem 0 2rem;}
+.commission-summary-tile{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;box-shadow:var(--shadow);}
+.commission-summary-tile-emphasis{background:var(--cerulean);border-color:var(--cerulean);}
+.commission-summary-tile-emphasis .commission-summary-label,.commission-summary-tile-emphasis .commission-summary-help{color:rgba(255,255,255,.85);}
+.commission-summary-tile-emphasis .commission-summary-amount{color:var(--white);}
+.commission-summary-label{text-transform:uppercase;font-size:.72rem;font-weight:600;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem;}
+.commission-summary-amount{font-family:'Urbanist',sans-serif;font-size:1.85rem;font-weight:800;color:var(--ink);line-height:1.1;}
+.commission-summary-help{color:var(--text-muted);font-size:.82rem;margin-top:.2rem;}
 
-  /* Comp structure */
-  .comp-section {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--teal);
-    border-radius: 0 6px 6px 0;
-    padding: 16px 20px;
-    margin-bottom: 2rem;
-  }
-  .comp-section-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #999;
-    margin-bottom: 10px;
-  }
-  .comp-section ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .comp-section li {
-    font-size: 13px;
-    color: #444;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-  }
-  .comp-section li::before { content: "·"; color: var(--teal); font-weight: 700; }
+/* Comp summary */
+.commission-comp-summary{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:1.5rem;box-shadow:var(--shadow);}
+.commission-comp-summary-title{font-family:'Urbanist',sans-serif;font-weight:700;color:var(--ink);margin-bottom:.6rem;}
+.commission-comp-summary-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.45rem;}
+.commission-comp-summary-list li{padding-left:1.1rem;position:relative;color:var(--ink);}
+.commission-comp-summary-list li::before{content:'•';color:var(--cerulean);position:absolute;left:0;font-weight:700;}
 
-  /* Comp plan inputs */
-  .inputs-section { margin-bottom: 2rem; }
-  .inputs-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #bbb;
-    margin-bottom: 10px;
-    display: block;
-  }
-  .inputs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  @media (max-width: 640px) { .inputs-grid { grid-template-columns: repeat(2, 1fr); } }
-  .input-card {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-  }
-  .input-card label {
-    display: block;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #aaa;
-    margin-bottom: 5px;
-  }
-  .input-row { display: flex; align-items: baseline; gap: 2px; }
-  .input-pfx { font-size: 14px; color: var(--muted); }
-  .input-card input {
-    width: 100%;
-    border: none;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--primary);
-    outline: none;
-    padding: 0;
-    min-width: 0;
-  }
-  .input-sfx { font-size: 14px; color: var(--muted); }
+/* Table section */
+.commission-table-section{margin-top:1.25rem;}
+.commission-section-title{font-family:'Urbanist',sans-serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin:0 0 .75rem;}
+.commission-table-wrap{overflow-x:auto;}
+.commission-table{width:100%;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums;}
+.commission-table thead th{color:var(--white);font-family:'Urbanist',sans-serif;font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1rem;text-align:center;border:none;}
+.commission-table tbody td{padding:.65rem .85rem;border:none;font-size:.95rem;vertical-align:middle;text-align:center;}
 
-  /* Table */
-  .table-section { margin-bottom: 2rem; }
-  .table-section-title {
-    font-family: 'Urbanist', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 12px;
-  }
-  .table-wrap { overflow-x: auto; }
+/* Group headers */
+.commission-group-blue{background:var(--cerulean);}
+.commission-group-green{background:var(--teal);}
+.commission-group-left{border-top-left-radius:10px;}
+.commission-group-right{border-top-right-radius:10px;}
+.commission-group-spacer{width:18px;min-width:18px;background:transparent!important;border:none!important;padding:0!important;}
 
-  table.ct {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-    min-width: 680px;
-  }
-  table.ct thead tr.group th {
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-  }
-  .gh-blue  { background: var(--primary); color: #fff; }
-  .gh-green { background: var(--green);   color: #fff; }
-  .gh-space { background: transparent; width: 8px; padding: 0; border: none; }
+/* Row alternation and year boundary */
+.commission-table.commission-table-grouped.commission-table-present tbody tr:nth-child(even) td:not(.commission-group-spacer){background:rgba(0,0,0,.025);}
+.commission-table.commission-table-grouped tbody tr.commission-row-year-boundary td:not(.commission-group-spacer){background:rgba(45,182,141,.12)!important;}
+.commission-table.commission-table-grouped tbody tr.commission-row-year-boundary .commission-cell-cumulative,
+.commission-table.commission-table-grouped tbody tr.commission-row-year-boundary .commission-month-label{color:var(--teal);font-weight:800;}
 
-  table.ct thead tr.cols th {
-    background: #2a2f36;
-    color: rgba(255,255,255,0.8);
-    padding: 7px 10px;
-    text-align: right;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    border-bottom: 2px solid rgba(255,255,255,0.1);
-  }
-  table.ct thead tr.cols th:first-child,
-  table.ct thead tr.cols th:nth-child(2) { text-align: center; }
-  table.ct thead tr.cols th.th-space { background: transparent; width: 8px; padding: 0; }
+/* Cell types */
+.commission-cell-month{white-space:nowrap;font-weight:600;}
+.commission-month-label{display:inline-block;}
+.commission-cell-input-readonly{font-weight:600;}
+.commission-cell-derived{color:var(--text-muted);}
+.commission-cell-total{font-weight:700;color:var(--ink);}
+.commission-cell-trailing{font-weight:600;color:var(--teal);}
+.commission-cell-cumulative{font-weight:600;color:var(--dark-blue);}
 
-  table.ct tbody td {
-    padding: 6px 10px;
-    border-bottom: 1px solid #f0f2f5;
-    text-align: right;
-    white-space: nowrap;
-    color: #444;
-    vertical-align: middle;
-  }
-  table.ct tbody td:first-child { text-align: center; font-weight: 700; color: var(--primary); }
-  table.ct tbody td.td-deals    { text-align: center; }
-  table.ct tbody td.td-space    { background: transparent; width: 8px; padding: 0; border: none; }
-  table.ct tbody tr:nth-child(even) td { background: #fafbfc; }
-  table.ct tbody tr:nth-child(even) td.td-space { background: transparent; }
-  table.ct tbody tr.yr-boundary td { border-top: 2px solid var(--teal); }
-  table.ct tbody td.td-total    { font-weight: 700; color: var(--primary); }
-  table.ct tbody td.td-trail    { font-weight: 600; color: var(--teal); }
-  table.ct tbody td.td-cumul    { font-weight: 700; color: var(--dark); }
+/* Footer */
+.commission-present-footer{margin-top:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;}
 
-  /* Editable deals */
-  .deals-inp {
-    width: 42px;
-    border: 1px solid transparent;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--primary);
-    text-align: center;
-    padding: 2px 3px;
-    border-radius: 3px;
-    outline: none;
-  }
-  .deals-inp:focus { border-color: var(--accent); background: #fff; }
-
-  .reset-btn {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 5px 12px;
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: inherit;
-    margin-top: 10px;
-  }
-  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .disclaimer {
-    margin-top: 10px;
-    font-size: 11px;
-    color: #bbb;
-    line-height: 1.5;
-  }
-
-  footer {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: #bbb;
-  }
+@media(max-width:720px){.commission-summary{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
+<main class="commission-present">
+  <div class="commission-present-inner">
+    <div class="commission-present-eyebrow">Built2Buy · Sales Rep Commission</div>
+    <h1 class="page-title">Sales Rep Commission Calculator</h1>
+    <p class="page-subtitle">24-month commission projection — recruiting baseline.</p>
 
-<div class="eyebrow">Built2Buy · Sales Rep Commission</div>
-<h1>Sales Rep Commission Calculator</h1>
-<p class="subtitle">24-month commission projection — recruiting baseline. Edit the ramp or comp plan inputs and all figures update instantly.</p>
-<hr class="divider">
-
-<!-- Summary tiles (populated by JS) -->
-<div class="summary-tiles">
-  <div class="tile">
-    <div class="tile-label">Year 1 total</div>
-    <div class="tile-amount" id="t-y1"></div>
-    <div class="tile-help">First 12 months</div>
-  </div>
-  <div class="tile">
-    <div class="tile-label">Year 2 total</div>
-    <div class="tile-amount" id="t-y2"></div>
-    <div class="tile-help">Months 13–24</div>
-  </div>
-  <div class="tile emphasis">
-    <div class="tile-label">24-month total</div>
-    <div class="tile-amount" id="t-total"></div>
-    <div class="tile-help">Cumulative</div>
-  </div>
-</div>
-
-<!-- Comp structure bullets (static) -->
-<div class="comp-section">
-  <div class="comp-section-title">Compensation structure</div>
-  <ul id="comp-bullets"></ul>
-</div>
-
-<!-- Comp plan inputs -->
-<div class="inputs-section">
-  <span class="inputs-label">Adjust comp plan</span>
-  <div class="inputs-grid">
-    <div class="input-card">
-      <label>Year 1 rate</label>
-      <div class="input-row">
-        <input type="number" id="y1" value="20" min="0" max="100" step="0.1" oninput="render()">
-        <span class="input-sfx">%</span>
+    <section class="commission-summary">
+      <div class="commission-summary-tile">
+        <div class="commission-summary-label">Year 1 total</div>
+        <div class="commission-summary-amount">$85,000</div>
+        <div class="commission-summary-help">First 12 months</div>
       </div>
-    </div>
-    <div class="input-card">
-      <label>Year 2 rate</label>
-      <div class="input-row">
-        <input type="number" id="y2" value="5" min="0" max="100" step="0.1" oninput="render()">
-        <span class="input-sfx">%</span>
+      <div class="commission-summary-tile">
+        <div class="commission-summary-label">Year 2 total</div>
+        <div class="commission-summary-amount">$209,400</div>
+        <div class="commission-summary-help">Months 13–24</div>
       </div>
-    </div>
-    <div class="input-card">
-      <label>Avg ARR per deal</label>
-      <div class="input-row">
-        <span class="input-pfx">$</span>
-        <input type="number" id="arr" value="12000" min="0" step="500" oninput="render()">
+      <div class="commission-summary-tile commission-summary-tile-emphasis">
+        <div class="commission-summary-label">24-month total</div>
+        <div class="commission-summary-amount">$294,400</div>
+        <div class="commission-summary-help">Cumulative</div>
       </div>
-    </div>
-    <div class="input-card">
-      <label>Avg install per deal</label>
-      <div class="input-row">
-        <span class="input-pfx">$</span>
-        <input type="number" id="inst" value="5000" min="0" step="500" oninput="render()">
+    </section>
+
+    <section class="commission-comp-summary">
+      <div class="commission-comp-summary-title">Compensation structure</div>
+      <ul class="commission-comp-summary-list">
+        <li><strong>20%</strong> of subscription + installation revenue, year 1 of each new customer</li>
+        <li><strong>5%</strong> of subscription revenue, year 2 (renewal)</li>
+        <li><strong>10%</strong> on additional contracts the same customer signs within their first year</li>
+      </ul>
+    </section>
+
+    <section class="commission-table-section">
+      <h2 class="commission-section-title">24-month projection</h2>
+      <div class="commission-table-wrap">
+        <table class="commission-table commission-table-grouped commission-table-present">
+          <thead>
+            <tr>
+              <th class="commission-group-blue commission-group-left">Month</th>
+              <th class="commission-group-blue commission-group-right">New deals</th>
+              <th class="commission-group-spacer" aria-hidden="true"></th>
+              <th class="commission-group-green commission-group-left">Install commissions</th>
+              <th class="commission-group-green">Recurring commission</th>
+              <th class="commission-group-green">Monthly commission</th>
+              <th class="commission-group-green">Trailing 12 months</th>
+              <th class="commission-group-green commission-group-right">Cumulative</th>
+            </tr>
+          </thead>
+          <tbody>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 1</span></td>
+      <td class="commission-cell-input-readonly">1</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$1,000</td>
+      <td class="commission-cell-derived">$200</td>
+      <td class="commission-cell-total">$1,200</td>
+      <td class="commission-cell-trailing">$1,200</td>
+      <td class="commission-cell-cumulative">$1,200</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 2</span></td>
+      <td class="commission-cell-input-readonly">2</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$2,000</td>
+      <td class="commission-cell-derived">$600</td>
+      <td class="commission-cell-total">$2,600</td>
+      <td class="commission-cell-trailing">$3,800</td>
+      <td class="commission-cell-cumulative">$3,800</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 3</span></td>
+      <td class="commission-cell-input-readonly">2</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$2,000</td>
+      <td class="commission-cell-derived">$1,000</td>
+      <td class="commission-cell-total">$3,000</td>
+      <td class="commission-cell-trailing">$6,800</td>
+      <td class="commission-cell-cumulative">$6,800</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 4</span></td>
+      <td class="commission-cell-input-readonly">3</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$3,000</td>
+      <td class="commission-cell-derived">$1,600</td>
+      <td class="commission-cell-total">$4,600</td>
+      <td class="commission-cell-trailing">$11,400</td>
+      <td class="commission-cell-cumulative">$11,400</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 5</span></td>
+      <td class="commission-cell-input-readonly">3</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$3,000</td>
+      <td class="commission-cell-derived">$2,200</td>
+      <td class="commission-cell-total">$5,200</td>
+      <td class="commission-cell-trailing">$16,600</td>
+      <td class="commission-cell-cumulative">$16,600</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 6</span></td>
+      <td class="commission-cell-input-readonly">4</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$4,000</td>
+      <td class="commission-cell-derived">$3,000</td>
+      <td class="commission-cell-total">$7,000</td>
+      <td class="commission-cell-trailing">$23,600</td>
+      <td class="commission-cell-cumulative">$23,600</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 7</span></td>
+      <td class="commission-cell-input-readonly">4</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$4,000</td>
+      <td class="commission-cell-derived">$3,800</td>
+      <td class="commission-cell-total">$7,800</td>
+      <td class="commission-cell-trailing">$31,400</td>
+      <td class="commission-cell-cumulative">$31,400</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 8</span></td>
+      <td class="commission-cell-input-readonly">4</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$4,000</td>
+      <td class="commission-cell-derived">$4,600</td>
+      <td class="commission-cell-total">$8,600</td>
+      <td class="commission-cell-trailing">$40,000</td>
+      <td class="commission-cell-cumulative">$40,000</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 9</span></td>
+      <td class="commission-cell-input-readonly">4</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$4,000</td>
+      <td class="commission-cell-derived">$5,400</td>
+      <td class="commission-cell-total">$9,400</td>
+      <td class="commission-cell-trailing">$49,400</td>
+      <td class="commission-cell-cumulative">$49,400</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 10</span></td>
+      <td class="commission-cell-input-readonly">4</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$4,000</td>
+      <td class="commission-cell-derived">$6,200</td>
+      <td class="commission-cell-total">$10,200</td>
+      <td class="commission-cell-trailing">$59,600</td>
+      <td class="commission-cell-cumulative">$59,600</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 11</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$7,200</td>
+      <td class="commission-cell-total">$12,200</td>
+      <td class="commission-cell-trailing">$71,800</td>
+      <td class="commission-cell-cumulative">$71,800</td>
+    </tr>
+    <tr class="commission-row-year-boundary">
+      <td class="commission-cell-month"><span class="commission-month-label">Month 12</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$8,200</td>
+      <td class="commission-cell-total">$13,200</td>
+      <td class="commission-cell-trailing">$85,000</td>
+      <td class="commission-cell-cumulative">$85,000</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 13</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$9,050</td>
+      <td class="commission-cell-total">$14,050</td>
+      <td class="commission-cell-trailing">$97,850</td>
+      <td class="commission-cell-cumulative">$99,050</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 14</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$9,750</td>
+      <td class="commission-cell-total">$14,750</td>
+      <td class="commission-cell-trailing">$110,000</td>
+      <td class="commission-cell-cumulative">$113,800</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 15</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$10,450</td>
+      <td class="commission-cell-total">$15,450</td>
+      <td class="commission-cell-trailing">$122,450</td>
+      <td class="commission-cell-cumulative">$129,250</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 16</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$11,000</td>
+      <td class="commission-cell-total">$16,000</td>
+      <td class="commission-cell-trailing">$133,850</td>
+      <td class="commission-cell-cumulative">$145,250</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 17</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$11,550</td>
+      <td class="commission-cell-total">$16,550</td>
+      <td class="commission-cell-trailing">$145,200</td>
+      <td class="commission-cell-cumulative">$161,800</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 18</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$11,950</td>
+      <td class="commission-cell-total">$16,950</td>
+      <td class="commission-cell-trailing">$155,150</td>
+      <td class="commission-cell-cumulative">$178,750</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 19</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$12,350</td>
+      <td class="commission-cell-total">$17,350</td>
+      <td class="commission-cell-trailing">$164,700</td>
+      <td class="commission-cell-cumulative">$196,100</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 20</span></td>
+      <td class="commission-cell-input-readonly">5</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$5,000</td>
+      <td class="commission-cell-derived">$12,750</td>
+      <td class="commission-cell-total">$17,750</td>
+      <td class="commission-cell-trailing">$173,850</td>
+      <td class="commission-cell-cumulative">$213,850</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 21</span></td>
+      <td class="commission-cell-input-readonly">6</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$6,000</td>
+      <td class="commission-cell-derived">$13,350</td>
+      <td class="commission-cell-total">$19,350</td>
+      <td class="commission-cell-trailing">$183,800</td>
+      <td class="commission-cell-cumulative">$233,200</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 22</span></td>
+      <td class="commission-cell-input-readonly">6</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$6,000</td>
+      <td class="commission-cell-derived">$13,950</td>
+      <td class="commission-cell-total">$19,950</td>
+      <td class="commission-cell-trailing">$193,550</td>
+      <td class="commission-cell-cumulative">$253,150</td>
+    </tr>
+    <tr>
+      <td class="commission-cell-month"><span class="commission-month-label">Month 23</span></td>
+      <td class="commission-cell-input-readonly">6</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$6,000</td>
+      <td class="commission-cell-derived">$14,400</td>
+      <td class="commission-cell-total">$20,400</td>
+      <td class="commission-cell-trailing">$201,750</td>
+      <td class="commission-cell-cumulative">$273,550</td>
+    </tr>
+    <tr class="commission-row-year-boundary">
+      <td class="commission-cell-month"><span class="commission-month-label">Month 24</span></td>
+      <td class="commission-cell-input-readonly">6</td>
+      <td class="commission-group-spacer" aria-hidden="true"></td>
+      <td class="commission-cell-derived">$6,000</td>
+      <td class="commission-cell-derived">$14,850</td>
+      <td class="commission-cell-total">$20,850</td>
+      <td class="commission-cell-trailing">$209,400</td>
+      <td class="commission-cell-cumulative">$294,400</td>
+    </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+    </section>
+
+    <footer class="commission-present-footer">
+      Built2Buy · built2buy.com
+    </footer>
   </div>
-</div>
-
-<!-- Cashflow table -->
-<div class="table-section">
-  <div class="table-section-title">24-month projection</div>
-  <div class="table-wrap">
-    <table class="ct">
-      <thead>
-        <tr class="group">
-          <th colspan="2" class="gh-blue">Pipeline</th>
-          <th class="gh-space" aria-hidden="true"></th>
-          <th colspan="5" class="gh-green">Commission</th>
-        </tr>
-        <tr class="cols">
-          <th>Month</th>
-          <th>New Deals</th>
-          <th class="th-space" aria-hidden="true"></th>
-          <th>Install</th>
-          <th>Recurring</th>
-          <th>This Month</th>
-          <th>Trailing 12</th>
-          <th>Cumulative</th>
-        </tr>
-      </thead>
-      <tbody id="ct-body"></tbody>
-    </table>
-  </div>
-  <button class="reset-btn" onclick="resetRamp()">Reset deals to baseline</button>
-  <p class="disclaimer">Commission math: install paid in deal month at Y1 rate; subscription commission paid monthly for 12 months at Y1 rate then 12 months at Y2 rate. All figures are projections only.</p>
-</div>
-
-<footer>Built2Buy &middot; built2buy.com &middot; Ideated And Architected By Steve Rice For Dotcomjungle and Built2Buy.</footer>
-
-<script>
-const DEFAULT_RAMP = [1,2,2,3,3,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,6,6,6,6];
-let ramp = [...DEFAULT_RAMP];
-
-const el = id => document.getElementById(id);
-function $m(cents) {
-  const sign = cents < 0 ? '-' : '';
-  return sign + '$' + Math.floor(Math.abs(cents) / 100).toLocaleString();
-}
-function applyRate(cents, bps) { return Math.round(cents * bps / 10000); }
-function mSlice(arr) { return Math.floor(arr / 12); }
-
-function compute(rampArr, y1Bps, y2Bps, arrCents, instCents) {
-  const N = 24;
-  const rows = Array.from({length: N}, (_, i) => ({
-    mo: i + 1, deals: rampArr[i] || 0,
-    install: 0, y1sub: 0, y2sub: 0, total: 0, trail: 0, cumul: 0,
-  }));
-  const installPer = applyRate(instCents, y1Bps);
-  const y1MonPer   = applyRate(mSlice(arrCents), y1Bps);
-  const y2MonPer   = applyRate(mSlice(arrCents), y2Bps);
-
-  for (let n = 1; n <= N; n++) {
-    const c = rows[n-1].deals;
-    if (!c) continue;
-    rows[n-1].install += installPer * c;
-    for (let o = 0; o < 12; o++) { if (n+o <= N) rows[n+o-1].y1sub += y1MonPer * c; }
-    for (let o = 12; o < 24; o++) { if (n+o <= N) rows[n+o-1].y2sub += y2MonPer * c; }
-  }
-  let cum = 0;
-  for (const r of rows) { r.total = r.install + r.y1sub + r.y2sub; cum += r.total; r.cumul = cum; }
-  for (let i = 0; i < N; i++) {
-    let s = 0;
-    for (let j = Math.max(0, i-11); j <= i; j++) s += rows[j].total;
-    rows[i].trail = s;
-  }
-  return rows;
-}
-
-function render() {
-  const y1Bps   = Math.round((parseFloat(el('y1').value) || 0) * 100);
-  const y2Bps   = Math.round((parseFloat(el('y2').value) || 0) * 100);
-  const arrC    = Math.round((parseFloat(el('arr').value) || 0) * 100);
-  const instC   = Math.round((parseFloat(el('inst').value) || 0) * 100);
-
-  const rows    = compute(ramp, y1Bps, y2Bps, arrC, instC);
-  const y1Total = rows[11].cumul;
-  const y2Total = rows[23].cumul - y1Total;
-
-  el('t-y1').textContent    = $m(y1Total);
-  el('t-y2').textContent    = $m(y2Total);
-  el('t-total').textContent = $m(rows[23].cumul);
-
-  // Comp bullets
-  const y1Pct = (y1Bps / 100).toFixed(y1Bps % 100 === 0 ? 0 : 2);
-  const y2Pct = (y2Bps / 100).toFixed(y2Bps % 100 === 0 ? 0 : 2);
-  el('comp-bullets').innerHTML = `
-    <li><strong>${y1Pct}%</strong> of subscription + installation revenue, year 1 of each new customer</li>
-    <li><strong>${y2Pct}%</strong> of subscription revenue, year 2 (renewal)</li>
-    <li><strong>10%</strong> on additional contracts the same customer signs within their first year</li>
-  `;
-
-  // Table
-  const tbody = el('ct-body');
-  tbody.innerHTML = '';
-  rows.forEach((r, i) => {
-    const isB = (i === 11 || i === 23);
-    const recurring = r.y1sub + r.y2sub;
-
-    const tr = document.createElement('tr');
-    if (isB) tr.className = 'yr-boundary';
-
-    // Month
-    const tdMo = document.createElement('td');
-    tdMo.textContent = 'Month ' + r.mo;
-    tr.appendChild(tdMo);
-
-    // New Deals (editable)
-    const tdD = document.createElement('td');
-    tdD.className = 'td-deals';
-    const inp = document.createElement('input');
-    inp.type = 'number'; inp.className = 'deals-inp';
-    inp.value = r.deals; inp.min = 0; inp.max = 99;
-    inp.dataset.i = i;
-    inp.addEventListener('change', function() {
-      ramp[+this.dataset.i] = Math.max(0, parseInt(this.value) || 0);
-      render();
-    });
-    tdD.appendChild(inp);
-    tr.appendChild(tdD);
-
-    // Spacer
-    const sp = document.createElement('td');
-    sp.className = 'td-space'; sp.setAttribute('aria-hidden', 'true');
-    tr.appendChild(sp);
-
-    // Data cells
-    [
-      { v: r.install, cls: '' },
-      { v: recurring,  cls: '' },
-      { v: r.total,    cls: 'td-total' },
-      { v: r.trail,    cls: 'td-trail' },
-      { v: r.cumul,    cls: 'td-cumul' },
-    ].forEach(({ v, cls }) => {
-      const td = document.createElement('td');
-      if (cls) td.className = cls;
-      td.textContent = $m(v);
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
-}
-
-function resetRamp() {
-  ramp = [...DEFAULT_RAMP];
-  render();
-}
-
-render();
-</script>
+</main>
 </body>
 </html>
