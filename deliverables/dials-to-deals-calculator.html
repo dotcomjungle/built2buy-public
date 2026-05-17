@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="summary" content="Interactive sales funnel calculator: enter a deal goal or profile to see leads, dials, and demos required">
+<meta name="crewmate" content="Bellana">
+<meta name="teammate" content="Steve">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deals to Dials Calculator | Built2Buy</title>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a6fa8;
+    --accent: #0693e3;
+    --teal: #2DB68D;
+    --dark: #111111;
+    --light: #f0f2f5;
+    --border: #e2e8f0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--dark);
+    line-height: 1.5;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    background: #fff;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--teal);
+  }
+  .page-header h1 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.02em;
+  }
+
+  .calc-section { margin-bottom: 2.5rem; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+  }
+  .section-head h2 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+  }
+
+  .global-select {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+  }
+  .global-select:focus { outline: none; border-color: var(--accent); }
+
+  /* Benchmarks table */
+  .rates-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .rates-table thead th {
+    text-align: left;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #bbb;
+    border-bottom: 2px solid var(--border);
+  }
+  .rates-table thead th.col-result { text-align: right; color: var(--teal); }
+
+  .rates-table tbody td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f4f5f7;
+    color: #555;
+    vertical-align: middle;
+  }
+  .rates-table tbody tr:last-child td { border-bottom: none; }
+
+  /* Fixed base row */
+  .row-base td {
+    background: #f8fafc;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .cell-metric  { width: 36%; }
+  .cell-profile { width: 22%; }
+  .cell-rate    { width: 10%; font-weight: 700; color: var(--primary); font-size: 1rem; }
+  .cell-result  { width: 32%; text-align: right; }
+
+  .row-select {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #555;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.2rem 0.35rem;
+    cursor: pointer;
+    width: 100%;
+  }
+  .row-select:focus { outline: none; border-color: var(--accent); }
+
+  .r-num {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+    line-height: 1;
+  }
+  .r-lbl {
+    font-size: 0.65rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 0.2rem;
+  }
+  .row-base .r-num { font-size: 1.6rem; color: var(--teal); }
+  .row-base .r-lbl { color: var(--teal); opacity: 0.7; }
+
+  /* Goal calculator */
+  .goal-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.1rem;
+  }
+  .goal-row label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .goal-row input {
+    width: 70px;
+    padding: 0.35rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    text-align: center;
+    color: var(--primary);
+  }
+  .goal-row input:focus { outline: none; border-color: var(--accent); }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+  }
+  @media (max-width: 580px) { .result-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .result-card {
+    background: var(--light);
+    border-radius: 6px;
+    padding: 0.85rem 0.7rem;
+    border-top: 2px solid var(--accent);
+  }
+  .result-card .val {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .result-card .lbl {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    font-weight: 600;
+  }
+
+  /* Multi-goal table */
+  .multi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .multi-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 0.55rem 0.7rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .multi-table td {
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    color: #555;
+  }
+  .multi-table tr:nth-child(even) td { background: var(--light); }
+  .multi-table td:first-child { font-weight: 700; color: var(--primary); }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.73rem;
+    color: #ccc;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Deals to Dials</h1>
+</div>
+
+<!-- Conversion Benchmarks -->
+<div class="calc-section">
+  <div class="section-head">
+    <h2>Conversion Benchmarks</h2>
+    <select id="global-select" class="global-select">
+      <option value="conservative">Conservative</option>
+      <option value="median" selected>Median</option>
+      <option value="optimistic">Optimistic</option>
+    </select>
+  </div>
+
+  <table class="rates-table">
+    <thead>
+      <tr>
+        <th class="cell-metric">Metric</th>
+        <th class="cell-profile">Profile</th>
+        <th class="cell-rate">Rate</th>
+        <th class="col-result">From 1,000 Calls</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-base">
+        <td class="cell-metric">Number of Calls</td>
+        <td class="cell-profile"></td>
+        <td class="cell-rate"></td>
+        <td class="cell-result">
+          <span class="r-num">1,000</span>
+          <span class="r-lbl">starting calls</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="cell-metric">Dials per Lead</td>
+        <td class="cell-profile">
+          <select class="row-select" data-metric="dpl">
+            <option value="conservative">Conservative</option>
+            <option value="median" selected>Median</option>
+            <option value="optimistic">Optimistic</option>
+          </select>
+        </td>
+        <td class="cell-rate" id="r-dpl"></td>
+        <td class="cell-result">
+          <span class="r-num" id="rr-pool"></span>
+          <span class="r-lbl">leads in pool</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="cell-metric">Lead Reachability</td>
+        <td class="cell-profile">
+          <select class="row-select" data-metric="reachability">
+            <option value="conservative">Conservative</option>
+            <option value="median" selected>Median</option>
+            <option value="optimistic">Optimistic</option>
+          </select>
+        </td>
+        <td class="cell-rate" id="r-reachability"></td>
+        <td class="cell-result">
+          <span class="r-num" id="rr-reached"></span>
+          <span class="r-lbl">leads reached</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="cell-metric">Demo Book Rate</td>
+        <td class="cell-profile">
+          <select class="row-select" data-metric="demoBook">
+            <option value="conservative">Conservative</option>
+            <option value="median" selected>Median</option>
+            <option value="optimistic">Optimistic</option>
+          </select>
+        </td>
+        <td class="cell-rate" id="r-demo-book"></td>
+        <td class="cell-result">
+          <span class="r-num" id="rr-booked"></span>
+          <span class="r-lbl">demos booked</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="cell-metric">Demo Completion Rate</td>
+        <td class="cell-profile">
+          <select class="row-select" data-metric="demoCompletion">
+            <option value="conservative">Conservative</option>
+            <option value="median" selected>Median</option>
+            <option value="optimistic">Optimistic</option>
+          </select>
+        </td>
+        <td class="cell-rate" id="r-demo-completion"></td>
+        <td class="cell-result">
+          <span class="r-num" id="rr-completed"></span>
+          <span class="r-lbl">demos completed</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="cell-metric">Demo Close Rate</td>
+        <td class="cell-profile">
+          <select class="row-select" data-metric="demoClose">
+            <option value="conservative">Conservative</option>
+            <option value="median" selected>Median</option>
+            <option value="optimistic">Optimistic</option>
+          </select>
+        </td>
+        <td class="cell-rate" id="r-demo-close"></td>
+        <td class="cell-result">
+          <span class="r-num" id="rr-closed"></span>
+          <span class="r-lbl">deals closed</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Goal Calculator -->
+<div class="calc-section">
+  <div class="section-head"><h2>Goal Calculator</h2></div>
+  <div class="goal-row">
+    <label for="goal-input">Deal goal:</label>
+    <input type="number" id="goal-input" value="10" min="1" max="500">
+  </div>
+  <div class="result-grid">
+    <div class="result-card"><div class="val" id="s-completed"></div><div class="lbl">Demos Completed</div></div>
+    <div class="result-card"><div class="val" id="s-booked"></div><div class="lbl">Demos Booked</div></div>
+    <div class="result-card"><div class="val" id="s-reached"></div><div class="lbl">Leads Reached</div></div>
+    <div class="result-card"><div class="val" id="s-pool"></div><div class="lbl">Leads in Pool</div></div>
+    <div class="result-card"><div class="val" id="s-dials"></div><div class="lbl">Total Dials</div></div>
+  </div>
+</div>
+
+<!-- Multi-Goal View -->
+<div class="calc-section">
+  <div class="section-head"><h2>Multi-Goal View</h2></div>
+  <table class="multi-table">
+    <thead>
+      <tr>
+        <th>Deals</th>
+        <th>Demos Completed</th>
+        <th>Demos Booked</th>
+        <th>Leads Reached</th>
+        <th>Leads in Pool</th>
+        <th>Total Dials</th>
+      </tr>
+    </thead>
+    <tbody id="multi-tbody"></tbody>
+  </table>
+</div>
+
+<div class="footer">Built2Buy &middot; built2buy.com</div>
+
+<script>
+const profiles = {
+  conservative: { demoClose: 0.20, demoCompletion: 0.60, demoBook: 0.15, reachability: 0.15, dpl: 7 },
+  median:        { demoClose: 0.35, demoCompletion: 0.65, demoBook: 0.20, reachability: 0.25, dpl: 4 },
+  optimistic:    { demoClose: 0.50, demoCompletion: 0.75, demoBook: 0.30, reachability: 0.40, dpl: 2.5 }
+};
+
+const sel = {
+  demoClose:    'median',
+  demoCompletion: 'median',
+  demoBook:     'median',
+  reachability: 'median',
+  dpl:          'median'
+};
+
+const el  = id => document.getElementById(id);
+const pct = v  => Math.round(v * 100) + '%';
+const fmt = v  => Math.round(v).toLocaleString();
+
+function vals() {
+  return {
+    demoClose:      profiles[sel.demoClose].demoClose,
+    demoCompletion: profiles[sel.demoCompletion].demoCompletion,
+    demoBook:       profiles[sel.demoBook].demoBook,
+    reachability:   profiles[sel.reachability].reachability,
+    dpl:            profiles[sel.dpl].dpl
+  };
+}
+
+function renderRates() {
+  const v = vals();
+  el('r-dpl').textContent             = v.dpl;
+  el('r-reachability').textContent    = pct(v.reachability);
+  el('r-demo-book').textContent       = pct(v.demoBook);
+  el('r-demo-completion').textContent = pct(v.demoCompletion);
+  el('r-demo-close').textContent      = pct(v.demoClose);
+}
+
+function renderResultColumn() {
+  const v        = vals();
+  const pool     = Math.floor(1000 / v.dpl);
+  const reached  = Math.floor(pool * v.reachability);
+  const booked   = Math.floor(reached * v.demoBook);
+  const completed = Math.floor(booked * v.demoCompletion);
+  const closed   = Math.floor(completed * v.demoClose);
+  el('rr-pool').textContent      = fmt(pool);
+  el('rr-reached').textContent   = fmt(reached);
+  el('rr-booked').textContent    = fmt(booked);
+  el('rr-completed').textContent = fmt(completed);
+  el('rr-closed').textContent    = fmt(closed);
+}
+
+function reverse(deals) {
+  const v        = vals();
+  const completed = Math.ceil(deals / v.demoClose);
+  const booked    = Math.ceil(completed / v.demoCompletion);
+  const reached   = Math.ceil(booked / v.demoBook);
+  const pool      = Math.ceil(reached / v.reachability);
+  const dials     = Math.ceil(pool * v.dpl);
+  return { completed, booked, reached, pool, dials };
+}
+
+function renderSingle() {
+  const goal = parseInt(el('goal-input').value, 10);
+  if (!goal || goal < 1) return;
+  const r = reverse(goal);
+  el('s-completed').textContent = fmt(r.completed);
+  el('s-booked').textContent    = fmt(r.booked);
+  el('s-reached').textContent   = fmt(r.reached);
+  el('s-pool').textContent      = fmt(r.pool);
+  el('s-dials').textContent     = fmt(r.dials);
+}
+
+function renderMulti() {
+  const goals = [2, 5, 10, 15, 20, 30];
+  const tbody = el('multi-tbody');
+  tbody.innerHTML = '';
+  goals.forEach(g => {
+    const r  = reverse(g);
+    const tr = document.createElement('tr');
+    [g, r.completed, r.booked, fmt(r.reached), fmt(r.pool), fmt(r.dials)].forEach(val => {
+      const td = document.createElement('td');
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function renderAll() {
+  renderRates();
+  renderResultColumn();
+  renderSingle();
+  renderMulti();
+}
+
+el('global-select').addEventListener('change', function() {
+  const prof = this.value;
+  Object.keys(sel).forEach(k => { sel[k] = prof; });
+  document.querySelectorAll('.row-select').forEach(s => { s.value = prof; });
+  renderAll();
+});
+
+document.querySelectorAll('.row-select').forEach(s => {
+  s.addEventListener('change', function() {
+    sel[this.dataset.metric] = this.value;
+    renderAll();
+  });
+});
+
+el('goal-input').addEventListener('input', renderSingle);
+
+renderAll();
+</script>
+</body>
+</html>
