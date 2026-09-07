@@ -1,0 +1,12 @@
+# Agent tooling is repository material, not site material. Vercel serves this project
+# statically from the repository root — https://built2buy-public.vercel.app/generate-commission.mjs
+# returns 200 today — so anything committed here is a candidate for being served on a
+# world-readable site with no login and no recall. Repo-root markdown is not served in
+# practice, but "not served in practice" is a property of Vercel's handling that could
+# change under us, and this site is the one place where being wrong about that is
+# unrecoverable. Keep the tooling out of the deployment rather than relying on it.
+.claude
+CLAUDE.md
+AGENTS.md
+.github
+.vercelignore
