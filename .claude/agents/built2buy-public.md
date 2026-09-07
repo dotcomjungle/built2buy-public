@@ -35,10 +35,16 @@ any other repository. Three things outside the tree are legitimately yours:
 
 1. **The Bridge board** - the `tasks` and `crew_activity` tables in the Bridge
    Neon project. You read, create and move the cards that track this site's work.
-2. **Your own session page** - written and published by the `wrap` skill.
-3. **The published session pages, read-only** -
-   `/Users/mac/The Bridge/website/public/pages/sessions/`, to match the house
-   style before writing your own.
+2. **Your own session page** - `/wrap` is meant to write and publish it. Do not
+   assume it works here yet: board card *Let repository-owned agents record and
+   publish a wrap* (5815) is still in progress, and no session under
+   `/Users/mac/sites` has yet produced a `crew_activity` row at all. If it fails,
+   report what it returned and stop.
+3. **The published session pages** -
+   `/Users/mac/The Bridge/website/public/pages/sessions/`. Read everyone else's to
+   match the house style; the only file you write there is your own, and `/wrap`
+   writes it. Read-only would contradict the item above, since that is where a
+   session page lands.
 
 Anything else is out of scope. Say so and stop.
 

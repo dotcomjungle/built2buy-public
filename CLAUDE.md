@@ -124,6 +124,13 @@ database refuses that. A card with no `owner_ref` is invisible on the board, so
 never leave it empty. The board accepts an owner name only once it has held a
 session, so record the session row before filing cards.
 
+**Filing a card under your own name does not work yet.** The board's API checks
+`owner_ref` against a roster that does not yet include repository-agent names, so
+a card filed as yourself is rejected with `unknown owner`. Board card *Accept a
+repository agent's own name as the owner of a card* (7024) is the fix and is not
+started. Until it lands, say what card you would file and let a person file it,
+rather than filing it under someone else's name.
+
 **Two tables, and nothing else:** `tasks` and `crew_activity`, in the Bridge
 project. Nothing in the tool grant enforces that — `run_sql` takes the project as
 a per-call argument — so this rule is the boundary. If a task seems to need
@@ -134,9 +141,13 @@ another project or another table, say so and stop.
 `RETURNING` — an update against the wrong id changes nothing and raises nothing,
 which reads exactly like success. Never write `WHERE crew_name = ...`.
 
-**At the end of a session** run `/wrap`. It writes and publishes your session
-page under your own name. Never edit the shared Bridge website checkout by hand.
-If `/wrap` fails, report exactly what it returned and stop.
+**At the end of a session** run `/wrap`. It is meant to write and publish your
+session page under your own name. **Do not assume it works here yet.** The
+capability is real for the plugin agents and unfinished for this tree — board
+card *Let repository-owned agents record and publish a wrap* (5815) is still in
+progress, and no session in `/Users/mac/sites` has yet produced a `crew_activity`
+row at all. If `/wrap` fails, report exactly what it returned and stop; do not
+hand-roll the publish steps and do not write into the Bridge website checkout.
 
 ---
 
