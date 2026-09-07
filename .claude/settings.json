@@ -1,0 +1,21 @@
+{
+  "_comment": [
+    "Committed on purpose: every clone gets the same grants and a reviewer can read them.",
+    "An entry ending in `:*` is a prefix match. An open `git fetch` wildcard is",
+    "deliberately absent, because git's ext:: transport turns a fetch url into a command.",
+    "There is no build or test step in this repository - it is hand-written static HTML -",
+    "so the only grants here are read-only git inspection and the page generator."
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(node generate-commission.mjs)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch origin:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git check-ignore:*)"
+    ]
+  }
+}

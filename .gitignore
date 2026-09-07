@@ -2,3 +2,13 @@
 .DS_Store
 node_modules/
 *.log
+.mcp.json
+
+# .claude/ is committed on purpose: the agent definition, the commands and the
+# pre-approved permissions are this repository's tooling, so every clone gets the same
+# setup and a reviewer can read it. Only the volatile and per-machine pieces stay out.
+# settings.local.json in particular is the per-folder permission drift the global rules
+# ban - a "don't ask again" grant belongs in ~/.claude/settings.json, not in a repo.
+**/.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/worktrees/
