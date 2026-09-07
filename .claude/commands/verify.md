@@ -20,7 +20,8 @@ Run each in order. Collect every finding rather than stopping at the first.
 
 ## 1 — HTML validity
 
-`tidy` is installed. Run it against every page you touched:
+`tidy` is installed and read-only, and `.claude/settings.json` grants it so it
+does not prompt. Run it against every page you touched:
 
 ```sh
 tidy -q -e --gnu-emacs yes index.html
@@ -56,6 +57,15 @@ Check the reverse direction too: every folder under `deliverables/` should be
 linked from `index.html`. A deliverable nobody can reach is published and
 invisible at the same time, which is the worst of both.
 
+**Two known exceptions, as of 2026-09-07**, so this check is not red for a reason
+nobody wrote down. `deliverables/built2buy-admin-redesign-wave-1-2026-04-25/` and
+`deliverables/built2buy-admin-redesign-wave-2-2026-04-25/` are both on disk, both
+reachable at their URLs by anyone who knows them, and neither is linked from
+`index.html`. They predate this command. Whether they should be linked or removed
+is a person's call — see the board card *Every page on the public site is either
+linked from the index or gone*. Until that is decided these two are the expected
+output; anything else this check reports is a real finding.
+
 ## 3 — Nothing internal leaked onto a public page
 
 Everything here is world-readable the moment it is pushed. These four greps
@@ -87,14 +97,22 @@ judgement.
 This is the check that replaces the test suite, so it is not optional and it is
 not a screenshot of the desktop width.
 
-Serve the site locally so `cleanUrls` behaves the way Vercel will:
+Serve the site locally:
 
 ```sh
-npx --yes serve . --no-clipboard
+python3 -m http.server 8000
 ```
 
-Or open the file directly if you only need to look at layout — knowing that a
-`file://` load will not resolve an extensionless link.
+Deliberately not `npx --yes serve`: that downloads a package and runs its
+lifecycle scripts, which is the action every settings file in this family
+withholds from an agent on purpose. `python3` is already here and downloads
+nothing.
+
+**It will not reproduce `cleanUrls`.** `vercel.json` sets `cleanUrls: true` and
+`trailingSlash: false`, so `/dials-to-deals-calculator` resolves on Vercel and
+404s under a plain static server. Check layout and content locally; the
+extensionless links are only genuinely proven on the deployed site, which a
+person publishes. Say which of the two you checked.
 
 Open every page you changed at a **desktop width and a phone width**, and say
 which pages you opened and at which widths. Check the things nothing else here

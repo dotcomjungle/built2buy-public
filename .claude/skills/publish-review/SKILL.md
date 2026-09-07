@@ -65,22 +65,24 @@ Read the page for each of these before you commit it.
 - **Unverified figures.** A statistic on a public page is a public claim. If it
   does not trace to something you can point at, it is unknown — say so and ask.
 
-## Customer canon, when a customer is named at all
+## Naming a customer, an advisor or a figure — read the canon, not a copy
 
-If a page names a customer, it names them the way the company names them
-everywhere:
+The customer and advisor naming canon, the Delaware ban and the rules about
+which proof metrics may be attributed to whom live in the Bridge's own
+`CLAUDE.md`, and the full working of them lives in
+`/Users/mac/sites/investor-data-room/CLAUDE.md` § "The one thing to get right".
+**Open one of those and read it. It is not restated here.**
 
-- **Natural Earth Paint** — full name, always. Never "NEP" in anything a reader
-  sees. They make natural, non-toxic art paints and kids' chalk paints.
-- **Joey's Hot Sauce** and **Darex Industrial** are the other two. All three are
-  live, paying customers.
-- **Broken Top Candles is not a customer.**
-- The legacy proof metrics — the 1,000-user launch, 110 hours a month saved, zero
-  training calls — are **anonymised results from prior enterprise clients**, never
-  attributed to a named current customer.
-- **Never connect Built2Buy or Dotcomjungle to Delaware** in any form.
-  Corporate-structure questions go to Steve or to Stewart Myers.
-- **Gregory Petrossian is not named.** Say "the GTM framework".
+That is not deference for its own sake. Copies of this canon had already drifted
+apart across two repositories on the day this file was written, and it has been
+amended three times by Steve. A short paraphrase living in a skill is the copy the
+next amendment misses — and on this repository, a stale claim about a customer
+does not stay internal.
+
+The rule that IS this repository's own: if a page names a customer, an advisor,
+a revenue figure or a proof metric, that page needs a person to read it before it
+goes out. Not because you cannot check it, but because being wrong here is
+public and permanent.
 
 ## The mechanical pass, then the judgement pass
 

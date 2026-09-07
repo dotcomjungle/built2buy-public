@@ -4,10 +4,17 @@
     "An entry ending in `:*` is a prefix match. An open `git fetch` wildcard is",
     "deliberately absent, because git's ext:: transport turns a fetch url into a command.",
     "There is no build or test step in this repository - it is hand-written static HTML -",
-    "so the only grants here are read-only git inspection and the page generator."
+    "so the grants are read-only git inspection, the page generator, and the two tools",
+    "/verify actually runs: tidy (read-only validity check) and python3's built-in static",
+    "server. `npx --yes serve` is deliberately NOT granted and /verify no longer uses it:",
+    "npx downloads a package and runs its lifecycle scripts, which is a person's decision",
+    "in every other repository in this family and should not be routine here either.",
+    "Keep these matching the commands /verify names - a near-miss silently prompts."
   ],
   "permissions": {
     "allow": [
+      "Bash(python3 -m http.server:*)",
+      "Bash(tidy -q -e --gnu-emacs yes:*)",
       "Bash(node generate-commission.mjs)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
