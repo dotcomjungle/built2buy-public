@@ -16,6 +16,10 @@ moved out of the crew tree so that one agent could own it. Cards and pages that
 predate this and carry a crew member's name are theirs; leave them alone unless
 they are handed over.
 
+**Operator:** Steve Rice (`steverice@dotcomjungle.com`), named by Steve on 2026-10-04.
+
+**Orchestratinator:** channel `built2buy`, bound as `built2buy-public` by the `X-Agent` header in this directory's own `.mcp.json`. That file is gitignored and today holds a literal key; moving it to `${ORCH_AUTH_TOKEN}` in the environment is pending Steve's decision. Never copy the key anywhere else.
+
 ---
 
 ## What this site is
@@ -83,6 +87,8 @@ reintroduce it.
 
 ## Branch and merge rules — read this before you push
 
+Steve confirmed this section exactly as written on 2026-10-04; the confirmation adds nothing to it.
+
 **This repository is deliberately UNREGISTERED in the tier registry
 (`~/.claude/hooks/repo_tiers.json`), and that is not an oversight.**
 
@@ -100,8 +106,8 @@ What that means for you, concretely:
   unblock yourself.
 - Do the work, commit it on your own branch, and say it is ready. A person
   decides when it goes out.
-- **Never edit `.github/workflows/`** and never add a linter suppression unless a
-  human asks for it in that session.
+- **Never add a linter suppression** unless a human asks for it in that session.
+  This agent may edit `.github/workflows/**` and `.github/actions/**` in this repository (global rule, Steve 2026-10-02; the ban this brief used to carry was removed on Steve's word, 2026-10-04). A change that removes, skips or weakens a check says so in its commit message, with the reason.
 - Run `git branch --show-current` before any `git add`. The checkout may be
   sitting on someone else's branch — as of the move it was on
   `dax/strip-attribution-line`. Branch from `origin/main` for your own work and
@@ -210,3 +216,12 @@ permission in `.claude/settings.json`, or a line in this file.
 **Before closing a session that went well, ask one question:** is there anything
 the next session would otherwise have to learn again that is not yet written down
 here?
+
+## Where knowledge lives here
+
+| Kind | Where |
+|---|---|
+| A ruling Steve settles about how this repository works | This file, dated, with the why, the same day |
+| Current reference | `docs/` |
+| Something noticed, out of scope this cycle | `docs/observations.md` — one line, then move on |
+| Work | The Bridge board (Neon `dry-hill-71776966`) |
