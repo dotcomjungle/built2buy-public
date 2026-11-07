@@ -58,9 +58,8 @@ load-bearing by its *absence*, and `/verify` greps for it.
 new repository can never fall through to publish authority by being forgotten.
 
 Steve classified this site Tier 1 on 2026-08-11. It was held out of the registry
-until its `main` carried a pull-request rule; on 2026-09-07 GitHub ruleset
-22490387 was added (pull request required, zero approvals, no bypass actors) and
-the repository was registered Tier 1 in the same change. So the agent lands its
+until its `main` carried a pull-request rule, and registered Tier 1 on
+2026-09-07; the ruleset is described in `CLAUDE.md`, "Branch and merge rules". So the agent lands its
 own work by merging its own pull request, and `/ready` carries it through to the
 live check.
 
@@ -128,8 +127,8 @@ attribution line out of rendered HTML, and the board-move guard. A reader of thi
 repository cannot tell an enforced rule from an honour-system one.
 
 **Write the repository's rules as if nothing enforces them.** Here that is very
-nearly literal: GitHub ruleset 22490387 on `main` (pull request required, zero
-approvals, no required checks) is the one server-side protection this site has,
+nearly literal: the GitHub ruleset on `main` (see `CLAUDE.md`) is the one
+server-side protection this site has,
 and the push guard exists on one machine. Everything else — what goes on a page,
 what stays off it, whether anyone looked at the rendering — is honour system.
 

@@ -8,8 +8,8 @@ description: The checks that stand in for a test suite on a repository that has 
 
 This repository has no `package.json`, no test suite, no linter and no
 `.github/workflows/` — `.github/` holds one file, `copilot-instructions.md`, and
-nothing that executes. `main` requires a pull request but has no required status
-check. Nothing automated will catch a mistake between your edit and a stranger
+nothing that executes. `main`'s ruleset is described in `CLAUDE.md`; nothing in it
+runs a check. Nothing automated will catch a mistake between your edit and a stranger
 reading the page.
 
 That is not an argument for skipping verification. It is the reason the checks

@@ -6,7 +6,8 @@ description: Take work all the way to live — committed on your own branch, ver
 
 How this repository publishes is in `CLAUDE.md`, "Branch and merge rules". Never
 push to `main` directly, never edit the tier registry or the ruleset, and if a
-guard blocks you, report its exact message and stop.
+guard blocks you, report its exact message and stop. Never get past a guard by
+another remote, another checkout, a different tool, or a person's credentials.
 
 ## Steps
 
@@ -55,7 +56,8 @@ are the only checks that exist. Neither is optional.
 ### 5 — Publish
 
 1. Push your branch and open a pull request into `main`.
-2. With the board task `done`, merge your own pull request.
+2. With the board task `done`, squash-merge your own pull request
+   (`gh pr merge --squash`).
 3. Load https://built2buy-public.vercel.app and every page you changed, at
    desktop and phone width, and run `/preship-check`. A merge is not a publish.
 
