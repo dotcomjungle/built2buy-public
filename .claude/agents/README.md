@@ -128,11 +128,10 @@ attribution line out of rendered HTML, and the board-move guard. A reader of thi
 repository cannot tell an enforced rule from an honour-system one.
 
 **Write the repository's rules as if nothing enforces them.** Here that is very
-nearly literal: the push guard is the single mechanical protection this site has,
-it exists on one machine, and everything else — what goes on a page, what stays
-off it, whether anyone looked at the rendering — is honour system. On a machine
-without those hooks, nothing at all stops a push straight to an unprotected public
-`main`.
+nearly literal: GitHub ruleset 22490387 on `main` (pull request required, zero
+approvals, no required checks) is the one server-side protection this site has,
+and the push guard exists on one machine. Everything else — what goes on a page,
+what stays off it, whether anyone looked at the rendering — is honour system.
 
 ## The permission file is repository-local on purpose
 

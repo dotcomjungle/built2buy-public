@@ -65,7 +65,8 @@ a `/pages/` prefix in a URL is wrong and will read as broken.
 
 1. Create `deliverables/<slug>/index.html`, with the slug ending `-YYYY-MM-DD`.
 2. Add a card to `index.html` linking to it.
-3. Commit, push, and Vercel deploys.
+3. Commit on your own branch, open a pull request into `main` and merge it
+   once its board task is done (see Branch and merge rules). Vercel deploys `main`.
 4. **Load the live URL and confirm it renders** before telling anyone it exists.
    A push is not a publish.
 

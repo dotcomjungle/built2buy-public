@@ -4,14 +4,11 @@ description: Take work all the way to live — committed on your own branch, ver
 
 # /ready
 
-This repository publishes its own work (Tier 1 in `~/.claude/hooks/repo_tiers.json`
-since 2026-09-07). `main` carries GitHub ruleset 22490387, which requires a pull
-request, so your work lands by merging your own pull request — without asking —
-once its board task is `done`. Never push to `main` directly, never edit the tier
-registry or the ruleset, and never route around a guard. If a guard blocks you,
-report its exact message and stop.
+How this repository publishes is in `CLAUDE.md`, "Branch and merge rules". Never
+push to `main` directly, never edit the tier registry or the ruleset, and if a
+guard blocks you, report its exact message and stop.
 
-## What you do instead
+## Steps
 
 ### 1 — Before anything else
 
