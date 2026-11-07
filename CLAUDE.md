@@ -16,7 +16,7 @@ they are handed over.
 
 **Operator:** Steve Rice (`steverice@dotcomjungle.com`), named by Steve on 2026-10-04.
 
-**Orchestratinator:** channel `built2buy`, bound as `built2buy-public`. Its `.mcp.json` is gitignored and today holds a literal key; moving it to `${ORCH_AUTH_TOKEN}` in the environment is pending Steve's decision. Never copy the key anywhere else.
+**Orchestratinator:** channel `built2buy`, bound as `built2buy-public`. Its `.mcp.json` is gitignored and reads its key from `${ORCH_AUTH_TOKEN}` in the environment (checked 2026-11-06). Never copy the key anywhere.
 
 ---
 
@@ -82,29 +82,30 @@ was removed from this site deliberately; do not reintroduce it.
 
 ## Branch and merge rules — read this before you push
 
-Steve confirmed this section exactly as written on 2026-10-04; the confirmation adds nothing to it.
-
-**This repository is deliberately UNREGISTERED in the tier registry
-(`~/.claude/hooks/repo_tiers.json`), and that is not an oversight.**
-
-Steve classified it Tier 1 on 2026-08-11. It was held out of the registry
-because registering it would replace today's fail-safe hard block with direct
-push authority on a public, customer-facing site whose `main` carries no branch
-protection, no ruleset and no required status check. It stays unregistered — and
-therefore blocked at the push guard — until that rule exists. The Bridge board
-card is *A pull-request rule guards the public site's main* (7624).
+**This repository publishes its own work.** The tier registry
+(`~/.claude/hooks/repo_tiers.json`) has listed it Tier 1 since 2026-09-07. Steve
+classified it Tier 1 on 2026-08-11; it was held out of the registry until its
+`main` carried a pull-request rule, and on 2026-09-07 GitHub ruleset 22490387
+was added to `main` (pull request required, zero approvals, no bypass actors,
+deletion and force-push blocked) and the repository was registered in the same
+change. Steve confirmed on 2026-11-06 that this brief should say so.
 
 What that means for you, concretely:
 
-- **The push guard will hard-block a push here.** That is the guard working, not
-  a bug, and not something to route around. Do not edit the tier registry to
-  unblock yourself.
-- Do the work, commit it on your own branch, and say it is ready. A person
-  decides when it goes out.
+- **Work on your own branch, cut from `origin/main`,** and land it through a pull
+  request. A direct push to `main` is refused by the ruleset.
+- **You merge your own pull request without asking** once its board task is
+  `done` and any required checks pass. There is no CI here, so the review gate,
+  `/verify` and the `publish-review` skill are the checks.
+- **Done means live.** After the merge, load the production URL
+  (https://built2buy-public.vercel.app) at desktop and phone width and run
+  `/preship-check` before telling anyone a page exists.
+- **Never edit the tier registry or the GitHub ruleset.** Branch protection is
+  paused company-wide; the ruleset stays as it is.
 - The ban on editing `.github/workflows/**` and `.github/actions/**` this brief
   used to carry was removed on Steve's word, 2026-10-04.
-- The checkout may be sitting on someone else's branch — as of the move it was on
-  `dax/strip-attribution-line`. Branch from `origin/main` for your own work.
+- The checkout may be sitting on someone else's branch. Check with
+  `git branch --show-current` before you commit.
 
 ---
 
@@ -115,12 +116,8 @@ What that means for you, concretely:
 database refuses that. The board accepts an owner name only once it has held a
 session, so record the session row before filing cards.
 
-**Filing a card under your own name does not work yet.** The board's API checks
-`owner_ref` against a roster that does not yet include repository-agent names, so
-a card filed as yourself is rejected with `unknown owner`. Board card *Accept a
-repository agent's own name as the owner of a card* (7024) is the fix and is not
-started. Until it lands, say what card you would file and let a person file it,
-rather than filing it under someone else's name.
+**You file cards under your own name.** The board accepts
+`owner_ref = 'built2buy-public'` (checked 2026-11-06).
 
 **Two tables, and nothing else:** `tasks` and `crew_activity`, in the Bridge
 project. Nothing in the tool grant enforces that — `run_sql` takes the project as
@@ -132,13 +129,10 @@ another project or another table, say so and stop.
 `RETURNING` — an update against the wrong id changes nothing and raises nothing,
 which reads exactly like success. Never write `WHERE crew_name = ...`.
 
-**At the end of a session** run `/wrap`. It is meant to write and publish your
-session page under your own name. **Do not assume it works here yet.** The
-capability is real for the plugin agents and unfinished for this tree — board
-card *Let repository-owned agents record and publish a wrap* (5815) is still in
-progress, and no session in `/Users/mac/sites` has yet produced a `crew_activity`
-row at all. If `/wrap` fails, report exactly what it returned and stop; do not
-hand-roll the publish steps and do not write into the Bridge website checkout.
+**At the end of a session** run `/wrap`. It writes and publishes your session
+page under your own name. If it fails, report exactly what it returned and stop;
+do not hand-roll the publish steps and do not write into the Bridge website
+checkout.
 
 ---
 

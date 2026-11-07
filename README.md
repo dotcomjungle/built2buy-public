@@ -9,14 +9,14 @@ Permanent public-facing static site for Built2Buy crew deliverables. Anything pu
 ## Structure
 
 - `index.html` — landing page listing all deliverables
-- `deliverables/<slug>/index.html` — one folder per deliverable, served at `/deliverables/<slug>/`
+- `deliverables/<slug>/index.html` — one folder per deliverable, served at `/deliverables/<slug>` (no trailing slash)
 - `vercel.json` — minimal Vercel config (static, no auth)
 
 ## Adding a new deliverable
 
 1. Create `deliverables/<slug>/index.html` (slug ends with `-YYYY-MM-DD`)
 2. Add a card to the index page linking to it
-3. `git push origin main` — Vercel auto-deploys
+3. Open a pull request into `main` and merge it once its board task is done — Vercel deploys `main`. Then load the live page.
 
 Brand styling: Urbanist for headings, Inter for body, colors `#0693e3` cerulean / `#2DB68D` teal / `#111111` dark / `#8ed1fc` soft blue.
 
