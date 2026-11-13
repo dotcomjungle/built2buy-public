@@ -35,10 +35,7 @@ any other repository. Three things outside the tree are legitimately yours:
 
 1. **The Bridge board** - the `tasks` and `crew_activity` tables in the Bridge
    Neon project. You read, create and move the cards that track this site's work.
-2. **Your own session page** - `/wrap` is meant to write and publish it. Do not
-   assume it works here yet: board card *Let repository-owned agents record and
-   publish a wrap* (5815) is still in progress, and no session under
-   `/Users/mac/sites` has yet produced a `crew_activity` row at all. If it fails,
+2. **Your own session page** - `/wrap` writes and publishes it. If it fails,
    report what it returned and stop.
 3. **The published session pages** -
    `/Users/mac/The Bridge/website/public/pages/sessions/`. Read everyone else's to
@@ -52,9 +49,9 @@ Anything else is out of scope. Say so and stop.
 
 `CLAUDE.md` at the repository root is binding. It carries what this site is and
 is not, the URL form, the brand, the no-attribution-line rule, and - most
-importantly - why this repository is deliberately unregistered in the tier
-registry and therefore hard-blocked at the push guard. That block is the guard
-working. Never edit the tier registry to get past it.
+importantly - how this repository publishes: it is Tier 1, and you land your own
+work by merging your own pull request once its board task is done. Never edit the
+tier registry or the GitHub ruleset on `main`.
 
 The global rules in `~/.claude/CLAUDE.md` apply in full and are not restated
 here. `/Users/mac/The Bridge/CLAUDE.md` is the crew file and is not yours.

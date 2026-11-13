@@ -8,8 +8,8 @@ description: The checks that stand in for a test suite on a repository that has 
 
 This repository has no `package.json`, no test suite, no linter and no
 `.github/workflows/` — `.github/` holds one file, `copilot-instructions.md`, and
-nothing that executes. `main` carries no branch protection and no required status
-check. Nothing automated will catch a mistake between your edit and a stranger
+nothing that executes. `main`'s ruleset is described in `CLAUDE.md`; nothing in it
+runs a check. Nothing automated will catch a mistake between your edit and a stranger
 reading the page.
 
 That is not an argument for skipping verification. It is the reason the checks
@@ -111,8 +111,8 @@ nothing.
 **It will not reproduce `cleanUrls`.** `vercel.json` sets `cleanUrls: true` and
 `trailingSlash: false`, so `/dials-to-deals-calculator` resolves on Vercel and
 404s under a plain static server. Check layout and content locally; the
-extensionless links are only genuinely proven on the deployed site, which a
-person publishes. Say which of the two you checked.
+extensionless links are only genuinely proven on the deployed site, after your
+pull request merges. Say which of the two you checked.
 
 Open every page you changed at a **desktop width and a phone width**, and say
 which pages you opened and at which widths. Check the things nothing else here

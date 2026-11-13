@@ -51,26 +51,17 @@ publishes to the open web, so an agent name, a crew persona byline or a
 who views source. That is the one place where a repository agent's name is
 load-bearing by its *absence*, and `/verify` greps for it.
 
-## The registry hold, and why there is no `/ship`
+## How this repository publishes
 
 `~/.claude/hooks/repo_tiers.json` maps each repository to its tier. An
 **unregistered repository hard-blocks on push** — the registry's fail-safe, so a
 new repository can never fall through to publish authority by being forgotten.
 
-For most new instances that block is a startup nuisance a person clears in a
-minute. **Here it is the design.** Steve classified this site Tier 1 on
-2026-08-11 and it was deliberately held out of the registry: registering it would
-replace the hard block with direct-push authority on a public, customer-facing
-site whose `main` carries no branch protection, no ruleset and no required status
-check — the very wall the registry's own integrity note names as what makes Tier 1
-safe. Verified against the GitHub API on 2026-09-07: `main` is still unprotected.
-The hold lifts when the board card **A pull-request rule guards the public site's
-main** (7624) is done, and not before.
-
-So this repository has no `/ship` command. It has `/ready`, and the agent's job
-ends at *committed on my own branch, ready for a person*. The registry file is
-agent-writable, which is exactly why the instructions have to say plainly that it
-is never edited to unblock a push.
+Steve classified this site Tier 1 on 2026-08-11. It was held out of the registry
+until its `main` carried a pull-request rule, and registered Tier 1 on
+2026-09-07; the ruleset is described in `CLAUDE.md`, "Branch and merge rules". So the agent lands its
+own work by merging its own pull request, and `/ready` carries it through to the
+live check.
 
 **When you write the next instance, check its default branch rather than reading
 its tier:**
@@ -82,8 +73,8 @@ gh api repos/<org>/<repo>/branches/main/protection
 Write down what you found, with the date. The siblings all differ:
 `investor-data-room` genuinely requires a pull request and a passing `Validate`
 check; `sales-cms` has no protection and no required check while its instructions
-still call it Tier 1; this one has no protection and is held unregistered so the
-guard blocks instead. Three repositories, three answers, one tier name.
+still call it Tier 1; this one requires a pull request with zero approvals and no
+required check (as of 2026-09-07). Three repositories, three answers, one tier name.
 
 ## What is this repository, and what is the pattern
 
@@ -136,11 +127,10 @@ attribution line out of rendered HTML, and the board-move guard. A reader of thi
 repository cannot tell an enforced rule from an honour-system one.
 
 **Write the repository's rules as if nothing enforces them.** Here that is very
-nearly literal: the push guard is the single mechanical protection this site has,
-it exists on one machine, and everything else — what goes on a page, what stays
-off it, whether anyone looked at the rendering — is honour system. On a machine
-without those hooks, nothing at all stops a push straight to an unprotected public
-`main`.
+nearly literal: the GitHub ruleset on `main` (see `CLAUDE.md`) is the one
+server-side protection this site has,
+and the push guard exists on one machine. Everything else — what goes on a page,
+what stays off it, whether anyone looked at the rendering — is honour system.
 
 ## The permission file is repository-local on purpose
 
