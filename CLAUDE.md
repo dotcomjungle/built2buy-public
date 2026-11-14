@@ -88,24 +88,25 @@ was removed from this site deliberately; do not reintroduce it.
 classified it Tier 1 on 2026-08-11; it was held out of the registry until its
 `main` carried a pull-request rule, and on 2026-09-07 GitHub ruleset 22490387
 was added to `main` (pull request required, zero approvals, no bypass actors,
-deletion and force-push blocked, linear history required, squash or rebase
-merges only) and the repository was registered in the same
-change. Steve confirmed on 2026-11-06 that this brief should say so.
+deletion and force-push blocked) and the repository was registered in the same
+change. Steve confirmed on 2026-11-06 that this brief should say so. On
+2026-11-14 Steve changed the ruleset by hand to drop linear history and allow
+merge commits and rebase merges, not squash, so the branch history survives the
+merge.
 
 What that means for you, concretely:
 
 - **Work on your own branch, cut from `origin/main`,** and land it through a pull
   request. A direct push to `main` is refused by the ruleset.
-- **You squash-merge your own pull request without asking**
-  (`gh pr merge --squash`; a merge commit is refused) once its board task is
+- **You merge your own pull request without asking**
+  (`gh pr merge --merge`; squash is refused) once its board task is
   `done` and any required checks pass. There is no CI here, so the review gate,
   `/verify` and the `publish-review` skill are the checks.
 - **Done means live.** After the merge, load the production URL
   (https://built2buy-public.vercel.app) at desktop and phone width and run
   `/preship-check` before telling anyone a page exists.
-- **A squash-merged branch never passes the dead-branch test,** because its tip is
-  not in `main`'s history. List it to your operator at cleanup rather than
-  deleting it.
+- **After the merge, delete your branch.** A merge commit keeps its tip in
+  `main`'s history, so it passes the dead-branch test.
 - **Never edit the tier registry or the GitHub ruleset.** Branch protection is
   paused company-wide; the ruleset stays as it is.
 - The ban on editing `.github/workflows/**` and `.github/actions/**` this brief
