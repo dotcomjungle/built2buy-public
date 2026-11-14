@@ -56,8 +56,8 @@ are the only checks that exist. Neither is optional.
 ### 5 — Publish
 
 1. Push your branch and open a pull request into `main`.
-2. With the board task `done`, squash-merge your own pull request
-   (`gh pr merge --squash`).
+2. With the board task `done`, merge your own pull request
+   (`gh pr merge --merge`), then delete the branch.
 3. Load https://built2buy-public.vercel.app and every page you changed, at
    desktop and phone width, and run `/preship-check`. A merge is not a publish.
 
