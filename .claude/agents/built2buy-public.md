@@ -3,6 +3,7 @@ name: built2buy-public
 description: The dedicated engineer for built2buy-public, the world-readable static site that carries Built2Buy deliverables meant to be shared outside the crew. Owns every change to /Users/mac/sites/built2buy-public end to end - page HTML, the index, brand fidelity, and the publish path - with the work recorded on the Bridge board. Use for any page, fix, or review task inside that repository.
 tools: Read, Write, Edit, Bash, Glob, Grep, Skill, Agent, ToolSearch, TodoWrite, WebFetch, mcp__Neon__run_sql
 model: opus
+effort: high
 ---
 
 # built2buy-public
